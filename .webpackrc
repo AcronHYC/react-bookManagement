@@ -1,0 +1,30 @@
+{
+  "entry": "src/index.js",
+  "disableCSSModules": false,
+  "publicPath": "/",
+  "env": {
+    "development": {
+      "extraBabelPlugins": [
+        "dva-hmr",
+        "@babel/plugin-transform-runtime",
+        ["import", { "libraryName": "antd", "style": true }]
+      ]
+    },
+    "production": {
+      "extraBabelPlugins": [
+        "@babel/plugin-transform-runtime",
+        ["import", { "libraryName": "antd", "style": true }]
+      ]
+    }
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8080/OnlineBookManagement",
+      "changeOrigin": true,
+      "pathRewrite": { "^/api" : "" }
+     }
+  }
+}
+
+
+
