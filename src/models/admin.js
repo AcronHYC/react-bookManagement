@@ -1,25 +1,44 @@
+import { queryAdminByParams } from "../services/admin";
 
 export default {
+  namespace: "admin",
 
-  namespace: 'example',
-
-  state: {},
+  state: {
+    list: [],
+    isExist: false
+  },
 
   subscriptions: {
-    setup({ dispatch, history }) {  // eslint-disable-line
-    },
+    setup({ dispatch, history }) {
+      // eslint-disable-line
+    }
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {  // eslint-disable-line
-      yield put({ type: 'save' });
-    },
+    *queryAdminByParams({ payload }, { select, call, put }) {
+      const response = yield call(queryAdminByParams, payload);
+      let list = response.result;
+      if (response.result) {
+        yield put({
+          type: "updateState",
+          payload: {
+            list: list
+          }
+        });
+      } else {
+        yield put({
+          type: "updateState",
+          payload: {
+            isExist: false
+          }
+        });
+      }
+    }
   },
 
   reducers: {
-    save(state, action) {
+    updateState(state, action) {
       return { ...state, ...action.payload };
-    },
-  },
-
+    }
+  }
 };

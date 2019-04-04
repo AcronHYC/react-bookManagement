@@ -1,29 +1,49 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'dva'
-import { Spin } from 'antd'
-import LoginForm from './LoginForm'
-import styles from './LoginForm.less'
+import React, { Component } from "react";
+import { connect } from "dva";
+import { Spin, Button } from "antd";
+import LoginForm from "./LoginForm";
+import { isAuthenticated } from "../../utils/cookie";
 
-function Login ({ dispatch, loading = false }) {
-  const loginProps = {
-    loading,
-    onOk (data) {
-      dispatch({ type: 'login/submit', payload: data })
-    },
+class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.dispatch = this.props.dispatch;
+    this.history = this.props.history;
   }
-  return (
-    <div className={styles.spin}><Spin tip="加载用户信息..." spinning={loading} size="large"><LoginForm {...loginProps} /></Spin></div>
-  )
+
+  componentWillMount() {
+    console.log(document.cookie);
+    if (isAuthenticated("uuid")) {
+      console.log("Your cookie uuid:" + isAuthenticated("uuid"));
+      this.history.push("/");
+    }
+  }
+
+  componentDidMount() {
+    this.dispatch({
+      type: "admin/queryAdminByParams",
+      payload: {
+        admin: {}
+      }
+    });
+  }
+
+  render() {
+    const { history, dispatch, admin, loading } = this.props;
+    const { list } = admin;
+
+    const loginProps = {
+      dispatch,
+      dataSource: list,
+      history
+    };
+
+    return (
+      <div style={{ maxWidth: "300px" }}>
+        <LoginForm {...loginProps} />
+      </div>
+    );
+  }
 }
 
-Login.propTypes = {
-  dispatch: PropTypes.func,
-  loading: PropTypes.bool,
-}
-
-function mapStateToProps ({ loading }) {
-  return { loading: loading.models.login }
-}
-
-export default connect(mapStateToProps)(Login)
+export default connect(({ admin, loading }) => ({ admin, loading }))(Login);

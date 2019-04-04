@@ -8,81 +8,55 @@ const menus = [
     key: "/home"
   },
   {
-    title: "基本组件",
-    icon: "laptop",
-    key: "/home/general",
-    subs: [
-      { key: "/home/general/button", title: "按钮", icon: "" },
-      { key: "/home/general/icon", title: "图标", icon: "" }
-    ]
-  },
-  {
-    title: "导航组件",
-    icon: "bars",
-    key: "/home/navigation",
-    subs: [
-      { key: "/home/navigation/dropdown", title: "下拉菜单", icon: "" },
-      { key: "/home/navigation/menu", title: "导航菜单", icon: "" },
-      { key: "/home/navigation/steps", title: "步骤条", icon: "" }
-    ]
-  },
-  {
-    title: "输入组件",
-    icon: "edit",
-    key: "/home/entry",
+    title: "管理员管理",
+    icon: "lock",
+    key: "/home/adminManagemment",
     subs: [
       {
-        key: "/home/entry/form",
-        title: "表单",
-        icon: "",
-        subs: [
-          { key: "/home/entry/form/basic-form", title: "基础表单", icon: "" },
-          { key: "/home/entry/form/step-form", title: "分步表单", icon: "" }
-        ]
+        key: "/home/adminManagemment/updateAdmin",
+        title: "修改资料",
+        icon: ""
       },
-      { key: "/home/entry/upload", title: "上传", icon: "" }
+      {
+        key: "/home/adminManagemment/queryAdmin",
+        title: "管理员列表",
+        icon: ""
+      },
+      { key: "/home/adminManagemment/addAdmin", title: "新增管理员", icon: "" }
     ]
   },
   {
-    title: "显示组件",
-    icon: "desktop",
-    key: "/home/display",
+    title: "读者管理",
+    icon: "user",
+    key: "/home/readerManagement",
+    subs: [{ key: "readerManagement", title: "查看读者信息", icon: "" }]
+  },
+  {
+    title: "图书管理",
+    icon: "book",
+    key: "/home/bookManagemment",
     subs: [
-      { key: "/home/display/carousel", title: "轮播图", icon: "" },
-      { key: "/home/display/collapse", title: "折叠面板", icon: "" },
-      { key: "/home/display/list", title: "列表", icon: "" },
-      { key: "/home/display/table", title: "表格", icon: "" },
-      { key: "/home/display/tabs", title: "标签页", icon: "" }
+      { key: "/home/bookManagemment/queryBook", title: "图书列表", icon: "" },
+      { key: "/home/bookManagemment/addBook", title: "新增图书", icon: "" },
+      { key: "/home/bookManagemment/addBookClass", title: "新增分类", icon: "" }
     ]
   },
   {
-    title: "反馈组件",
-    icon: "message",
-    key: "/home/feedback",
+    title: "借还管理",
+    icon: "read",
+    key: "/home/circulateManagemment",
     subs: [
-      { key: "/home/feedback/modal", title: "对话框", icon: "" },
-      { key: "/home/feedback/notification", title: "通知提醒框", icon: "" },
-      { key: "/home/feedback/spin", title: "加载中", icon: "" }
+      {
+        key: "/home/circulateManagemment/borrowBook",
+        title: "借书管理",
+        icon: ""
+      },
+      {
+        key: "/home/circulateManagemment/lendBook",
+        title: "还书管理",
+        icon: ""
+      }
     ]
-  },
-  {
-    title: "其它",
-    icon: "bulb",
-    key: "/home/other",
-    subs: [
-      { key: "/home/other/animation", title: "动画", icon: "" },
-      { key: "/home/other/gallery", title: "画廊", icon: "" },
-      { key: "/home/other/draft", title: "富文本", icon: "" },
-      { key: "/home/other/chart", title: "图表", icon: "" },
-      { key: "/home/other/loading", title: "加载动画", icon: "" },
-      { key: "/home/other/404", title: "404", icon: "" },
-      { key: "/home/other/springText", title: "弹性文字", icon: "" }
-    ]
-  },
-  {
-    title: "关于",
-    icon: "info-circle-o",
-    key: "/home/about"
   }
 ];
 

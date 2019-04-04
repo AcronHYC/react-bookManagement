@@ -3,22 +3,31 @@ import { Layout } from "antd";
 import SiderNav from "../../components/SiderNav";
 // import ContentMain from '../../components/ContentMain'
 import HeaderBar from "../../components/HeaderBar";
+import {
+  isAuthenticated,
+  authenticateSuccess,
+  logout
+} from "../../utils/cookie";
 
 const { Sider, Header, Content, Footer } = Layout;
 
 class Index extends React.Component {
+  constructor(props) {
+    super(props);
+    this.dispatch = this.props.dispatch;
+  }
+
   state = {
     collapsed: false
   };
 
   toggle = () => {
-    // console.log(this)  状态提升后，到底是谁调用的它
     this.setState({
       collapsed: !this.state.collapsed
     });
   };
+
   render() {
-    // 设置Sider的minHeight可以使左右自适应对齐
     return (
       <div id="page">
         <Layout>

@@ -14,8 +14,7 @@ const app = dva({
 app.use(createLoading({ effects: true }));
 
 // 3. Model
-// app.model(require('./models/app'))
-// app.model(require('./models/modal'))
+app.model(require("./models/admin").default);
 
 // 4. Router for browserHistory dynamic load
 app.router(require("./router").default);

@@ -1,71 +1,82 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Button, Form, Input } from "antd";
+import React, { Component } from "react";
+import { Button, Form, Input, Icon, Checkbox, message } from "antd";
 import QueueAnim from "rc-queue-anim";
-import styles from "./LoginForm.less";
+import {
+  isAuthenticated,
+  authenticateSuccess,
+  logout
+} from "../../utils/cookie";
 
 const FormItem = Form.Item;
 
-const Login = ({
-  loading,
-  onOk,
-  form: { getFieldDecorator, validateFieldsAndScroll }
-}) => {
-  function handleOk(e) {
-    e.preventDefault();
-    validateFieldsAndScroll((errors, values) => {
-      if (errors) {
-        return;
-      }
-      onOk(values);
-    });
+class LoginForm extends Component {
+  constructor(props) {
+    super(props);
   }
 
-  return (
-    <div className={styles.form}>
-      <QueueAnim delay={200} type="top" />
-      <form onSubmit={handleOk}>
-        <QueueAnim delay={200} type="top">
-          <FormItem hasFeedback key="1">
-            {getFieldDecorator("username", {
-              rules: [
-                {
-                  required: true,
-                  message: "请填写用户名"
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { dataSource, dispath, history } = this.props;
+
+    const handleSubmit = e => {
+      e.preventDefault();
+      this.props.form.validateFieldsAndScroll((err, values) => {
+        dataSource.map(item => {
+          if (
+            item.adminName === values.adminName &&
+            item.password === values.password
+          ) {
+            let loginUser = item;
+            authenticateSuccess(loginUser);
+            this.props.history.push("/");
+          }
+        });
+        message.error("用户名或密码错误!");
+      });
+    };
+
+    return (
+      <div>
+        <h3>管理员登录</h3>
+        <Form onSubmit={handleSubmit}>
+          <Form.Item>
+            {getFieldDecorator("adminName", {
+              rules: [{ required: true, message: "请输入用户名!" }]
+            })(
+              <Input
+                prefix={
+                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
-              ]
-            })(<Input size="large" placeholder="用户名" />)}
-          </FormItem>
-          <FormItem hasFeedback key="2">
+                placeholder="用户名"
+              />
+            )}
+          </Form.Item>
+          <Form.Item>
             {getFieldDecorator("password", {
-              rules: [
-                {
-                  required: true,
-                  message: "请填写密码"
+              rules: [{ required: true, message: "请输入密码!" }]
+            })(
+              <Input
+                prefix={
+                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
-              ]
-            })(<Input size="large" type="password" placeholder="密码" />)}
-          </FormItem>
-          <FormItem key="3">
-            <Button
-              type="primary"
-              htmlType="submit"
-              size="large"
-              loading={loading}
-            >
+                type="password"
+                placeholder="密码"
+              />
+            )}
+          </Form.Item>
+          <Form.Item>
+            {getFieldDecorator("remember", {
+              valuePropName: "checked",
+              initialValue: true
+            })(<Checkbox>记住密码</Checkbox>)}
+            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
               登录
             </Button>
-          </FormItem>
-        </QueueAnim>
-      </form>
-    </div>
-  );
-};
+          </Form.Item>
+        </Form>
+      </div>
+    );
+  }
+}
 
-Login.propTypes = {
-  form: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onOk: PropTypes.func.isRequired
-};
-
-export default Form.create()(Login);
+export default Form.create()(LoginForm);
