@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout } from "antd";
 import SiderNav from "../../components/SiderNav";
-// import ContentMain from '../../components/ContentMain'
+import ContentMain from "../../components/ContentMain";
 import HeaderBar from "../../components/HeaderBar";
 import {
   isAuthenticated,
@@ -41,7 +41,9 @@ class Index extends React.Component {
                 onToggle={this.toggle}
               />
             </Header>
-            <Content>{/* <ContentMain/> */}</Content>
+            <Content style={{ background: "#FFF" }}>
+              <ContentMain />
+            </Content>
           </Layout>
         </Layout>
       </div>

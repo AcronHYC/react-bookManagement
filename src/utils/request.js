@@ -56,6 +56,7 @@ const errorMessage = {
 export async function sendRequest(url, options) {
   let searchStr = "";
   let initObj = {};
+  let jsonData = "";
   options = appUtils.removeObjUnAttr(options);
   if (options.method === REQUSET_METHOD.GET) {
     if (options.params) {
@@ -64,6 +65,19 @@ export async function sendRequest(url, options) {
     }
     initObj = {
       method: options.method
+    };
+  } else if (options.method === REQUSET_METHOD.POST) {
+    if (options.params) {
+      let jsonData = JSON.stringify(options.params);
+    }
+    initObj = {
+      method: options.method,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+      },
+      body: jsonData,
+      credentials: "include"
     };
   }
   return fetch(url, initObj)

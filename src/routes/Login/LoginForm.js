@@ -21,25 +21,30 @@ class LoginForm extends Component {
     const handleSubmit = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
+        let flag = false;
         dataSource.map(item => {
           if (
             item.adminName === values.adminName &&
             item.password === values.password
           ) {
             let loginUser = item;
+            flag = true;
             authenticateSuccess(loginUser);
             this.props.history.push("/");
+            message.success("登录成功!");
           }
         });
-        message.error("用户名或密码错误!");
+        if (!flag) {
+          message.error("用户名或密码错误!");
+        }
       });
     };
 
     return (
       <div>
-        <h3>管理员登录</h3>
+        <h3 style={{ color: "grey" }}>管理员登录</h3>
         <Form onSubmit={handleSubmit}>
-          <Form.Item>
+          <Form.Item hasFeedback>
             {getFieldDecorator("adminName", {
               rules: [{ required: true, message: "请输入用户名!" }]
             })(
@@ -51,7 +56,7 @@ class LoginForm extends Component {
               />
             )}
           </Form.Item>
-          <Form.Item>
+          <Form.Item hasFeedback>
             {getFieldDecorator("password", {
               rules: [{ required: true, message: "请输入密码!" }]
             })(
@@ -74,6 +79,7 @@ class LoginForm extends Component {
             </Button>
           </Form.Item>
         </Form>
+        <h5 style={{ color: "grey" }}>欢迎登陆网上图书管理系统</h5>
       </div>
     );
   }

@@ -1,9 +1,18 @@
 import React from "react";
-import { Icon, Badge, Dropdown, Menu, Modal } from "antd";
+import { Icon, Badge, Dropdown, Menu, Modal, Popconfirm } from "antd";
 import screenfull from "screenfull";
 import { Link, withRouter } from "react-router-dom";
+import {
+  isAuthenticated,
+  authenticateSuccess,
+  logout
+} from "../../utils/cookie";
 
 class HeaderBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.history = this.props.history;
+  }
   state = {
     icon: "arrows-alt"
   };
@@ -30,6 +39,11 @@ class HeaderBar extends React.Component {
     }
   };
 
+  onOk = () => {
+    logout();
+    this.history.push("/login");
+  };
+
   render() {
     const { collapsed } = this.props;
     const { icon } = this.state;
@@ -48,6 +62,15 @@ class HeaderBar extends React.Component {
           onClick={this.screenfullToggle}
           style={{ fontSize: "22px" }}
         />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <Popconfirm
+          title="确定退出登录吗？"
+          okText="确定"
+          cancelText="取消"
+          onConfirm={this.onOk}
+        >
+          <Icon type="logout" style={{ fontSize: "22px" }} />
+        </Popconfirm>
       </div>
     );
   }

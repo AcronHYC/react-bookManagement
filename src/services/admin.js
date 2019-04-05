@@ -2,7 +2,7 @@ import { sendRequest } from "../utils/request";
 
 export function queryAdminByParams(params) {
   return sendRequest("/api/admin/queryAdminByParams", {
-    method: "GET",
+    method: "POST",
     params: params
   });
 }

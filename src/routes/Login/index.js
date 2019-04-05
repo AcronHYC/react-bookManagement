@@ -3,6 +3,7 @@ import { connect } from "dva";
 import { Spin, Button } from "antd";
 import LoginForm from "./LoginForm";
 import { isAuthenticated } from "../../utils/cookie";
+import styles from "./style.css";
 
 class Login extends Component {
   constructor(props) {
@@ -39,7 +40,7 @@ class Login extends Component {
     };
 
     return (
-      <div style={{ maxWidth: "300px" }}>
+      <div className={styles.loginForm}>
         <LoginForm {...loginProps} />
       </div>
     );
