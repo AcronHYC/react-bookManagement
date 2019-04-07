@@ -1,0 +1,8 @@
+body{
+    background: url("../../assets/loginBackground.jpg");
+}
+.loginForm{
+    max-width: 300px;
+    margin-left: 39%;
+    margin-top: 10%;
+}
