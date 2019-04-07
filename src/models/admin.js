@@ -1,4 +1,8 @@
-import { queryAdminByParams, queryAdminByPage } from "../services/admin";
+import {
+  queryAdminByParams,
+  queryAdminByPage,
+  queryAdminByFuzzyAndPage
+} from "../services/admin";
 
 export default {
   namespace: "admin",
@@ -37,6 +41,20 @@ export default {
     },
     *queryAdminByPage({ payload }, { select, call, put }) {
       const response = yield call(queryAdminByPage, payload);
+      if (response.result.jsonAdminList) {
+        let list = response.result.jsonAdminList;
+        let pagination = response.result.pagination;
+        yield put({
+          type: "updateState",
+          payload: {
+            list,
+            pagination
+          }
+        });
+      }
+    },
+    *queryAdminByFuzzyAndPage({ payload }, { select, call, put }) {
+      const response = yield call(queryAdminByFuzzyAndPage, payload);
       if (response.result.jsonAdminList) {
         let list = response.result.jsonAdminList;
         let pagination = response.result.pagination;

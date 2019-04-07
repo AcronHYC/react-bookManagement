@@ -13,3 +13,10 @@ export function queryAdminByPage(params) {
     params: params
   });
 }
+
+export function queryAdminByFuzzyAndPage(params) {
+  return sendRequest("/api/admin/queryAdminByFuzzyAndPage", {
+    method: "GET",
+    params: params
+  });
+}

@@ -68,7 +68,7 @@ export async function sendRequest(url, options) {
     };
   } else if (options.method === REQUSET_METHOD.POST) {
     if (options.params) {
-      let jsonData = JSON.stringify(options.params);
+      jsonData = JSON.stringify(options.params);
     }
     initObj = {
       method: options.method,
