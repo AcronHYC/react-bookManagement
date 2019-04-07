@@ -22,7 +22,7 @@ class Login extends Component {
 
   componentDidMount() {
     this.dispatch({
-      type: "admin/queryAdminByParams",
+      type: "login/queryAdminByParams",
       payload: {
         admin: {}
       }
@@ -30,8 +30,8 @@ class Login extends Component {
   }
 
   render() {
-    const { history, dispatch, admin, loading } = this.props;
-    const { list } = admin;
+    const { history, dispatch, login, loading } = this.props;
+    const { list } = login;
 
     const loginProps = {
       dispatch,
@@ -41,10 +41,15 @@ class Login extends Component {
 
     return (
       <div className={styles.loginForm}>
-        <LoginForm {...loginProps} />
+        <Spin
+          tip="加载中..."
+          spinning={loading.effects["login/queryAdminByParams"]}
+        >
+          <LoginForm {...loginProps} />
+        </Spin>
       </div>
     );
   }
 }
 
-export default connect(({ admin, loading }) => ({ admin, loading }))(Login);
+export default connect(({ login, loading }) => ({ login, loading }))(Login);

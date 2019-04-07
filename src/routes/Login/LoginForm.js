@@ -6,6 +6,7 @@ import {
   authenticateSuccess,
   logout
 } from "../../utils/cookie";
+import { withRouter } from "react-router-dom";
 
 const FormItem = Form.Item;
 
@@ -16,7 +17,7 @@ class LoginForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataSource, dispath, history } = this.props;
+    const { dataSource, dispatch, history } = this.props;
 
     const handleSubmit = e => {
       e.preventDefault();
@@ -30,7 +31,7 @@ class LoginForm extends Component {
             let loginUser = item;
             flag = true;
             authenticateSuccess(loginUser);
-            this.props.history.push("/");
+            history.push("/");
             message.success("登录成功!");
           }
         });
@@ -85,4 +86,4 @@ class LoginForm extends Component {
   }
 }
 
-export default Form.create()(LoginForm);
+export default withRouter(Form.create()(LoginForm));

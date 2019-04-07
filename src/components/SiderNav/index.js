@@ -1,5 +1,6 @@
 import React from "react";
 import CustomMenu from "../CustomMenu/index";
+import styles from "./style.css";
 
 const menus = [
   {
@@ -64,19 +65,11 @@ class SiderNav extends React.Component {
   render() {
     return (
       <div style={{ height: "100vh" }}>
-        <div style={styles.logo} />
+        {/* <div style={{ height: "70px", width: "100%" }} /> */}
         <CustomMenu menus={menus} />
       </div>
     );
   }
 }
-
-const styles = {
-  logo: {
-    height: "32px",
-    background: "rgba(255, 255, 255, .2)",
-    margin: "16px"
-  }
-};
 
 export default SiderNav;

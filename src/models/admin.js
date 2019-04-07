@@ -1,35 +1,50 @@
-import { queryAdminByParams } from "../services/admin";
+import { queryAdminByParams, queryAdminByPage } from "../services/admin";
 
 export default {
   namespace: "admin",
 
   state: {
     list: [],
-    isExist: false
+    pagination: {}
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
-      // eslint-disable-line
+      history.listen(location => {
+        console.log(location.pathname);
+        if (location.pathname === "/home/adminManagemment/queryAdmin") {
+          dispatch({
+            type: "queryAdminByPage",
+            payload: {}
+          });
+        }
+      });
     }
   },
 
   effects: {
     *queryAdminByParams({ payload }, { select, call, put }) {
       const response = yield call(queryAdminByParams, payload);
-      let list = response.result;
       if (response.result) {
+        let list = response.result;
         yield put({
           type: "updateState",
           payload: {
-            list: list
+            list
           }
         });
-      } else {
+      }
+    },
+    *queryAdminByPage({ payload }, { select, call, put }) {
+      const response = yield call(queryAdminByPage, payload);
+      if (response.result.jsonAdminList) {
+        let list = response.result.jsonAdminList;
+        let pagination = response.result.pagination;
         yield put({
           type: "updateState",
           payload: {
-            isExist: false
+            list,
+            pagination
           }
         });
       }

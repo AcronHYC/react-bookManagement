@@ -6,3 +6,10 @@ export function queryAdminByParams(params) {
     params: params
   });
 }
+
+export function queryAdminByPage(params) {
+  return sendRequest("/api/admin/queryAdminByPage", {
+    method: "GET",
+    params: params
+  });
+}

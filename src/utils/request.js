@@ -84,6 +84,7 @@ export async function sendRequest(url, options) {
     .then(checkStatus)
     .then(parseJSON)
     .then(response => {
+      console.log(response);
       return {
         success: true,
         result: response
