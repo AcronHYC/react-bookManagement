@@ -20,3 +20,10 @@ export function queryAdminByFuzzyAndPage(params) {
     params: params
   });
 }
+
+export function addAdmin(params) {
+  return sendRequest("/api/admin/addAdmin", {
+    method: "GET",
+    params: params
+  });
+}

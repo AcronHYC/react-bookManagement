@@ -15,6 +15,13 @@ class QueryAdmin extends Component {
     selectedKey: "adminName"
   };
 
+  componentDidMount() {
+    this.props.dispatch({
+      type: "admin/queryAdminByPage",
+      payload: {}
+    });
+  }
+
   render() {
     const { dispatch, admin, loading } = this.props;
     const { list, pagination } = admin;

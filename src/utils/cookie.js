@@ -32,6 +32,7 @@ function _getCookie(name) {
 
 function _setCookie(loginUser, expire) {
   let date = new Date();
+  console.log(loginUser);
   date.setDate(date.getDate() + expire);
   document.cookie = "uuid=" + loginUser.uuid;
   document.cookie = "adminName=" + loginUser.adminName;
@@ -40,7 +41,8 @@ function _setCookie(loginUser, expire) {
   document.cookie = "sex=" + loginUser.sex;
   document.cookie = "telephone=" + loginUser.telephone;
   document.cookie = "email=" + loginUser.email;
-  document.role = "email=" + loginUser.role;
+  document.cookie = "role=" + loginUser.role;
+  document.cookie = "roleName=" + loginUser.roleName;
   document.cookie = "path=/" + (expire ? ";expires=" + date.toGMTString() : "");
   console.log(document.cookie);
 }

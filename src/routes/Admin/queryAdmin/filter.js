@@ -18,11 +18,6 @@ class Filter extends Component {
       this.setState({
         selectedKey: value
       });
-      selectCallback(value);
-    };
-
-    const onInputChange = e => {
-      inputCallback(e.target.value);
     };
 
     const select = (
@@ -32,7 +27,7 @@ class Filter extends Component {
         <Option value="sex">性别</Option>
         <Option value="telephone">电话</Option>
         <Option value="email">邮箱</Option>
-        <Option value="role">权限</Option>
+        <Option value="roleName">权限</Option>
       </Select>
     );
 
@@ -48,6 +43,8 @@ class Filter extends Component {
           "key:" + this.state.selectedKey + ",value:" + values.filterValue
         );
         if (values.filterValue !== undefined && values.filterValue.length > 0) {
+          selectCallback(this.state.selectedKey);
+          inputCallback(values.filterValue);
           let jsonString =
             '{"' + this.state.selectedKey + '":"' + values.filterValue + '"}';
           let jsonObject = JSON.parse(jsonString);
@@ -56,6 +53,7 @@ class Filter extends Component {
             payload: jsonObject
           });
         } else {
+          inputCallback("");
           dispatch({
             type: "admin/queryAdminByPage",
             payload: {}
@@ -69,11 +67,7 @@ class Filter extends Component {
         <Form layout="inline" onSubmit={handleSubmit}>
           <FormItem>
             {getFieldDecorator("filterValue")(
-              <Input
-                addonBefore={select}
-                placeholder="请输入查询值"
-                onChange={onInputChange}
-              />
+              <Input addonBefore={select} placeholder="请输入查询值" />
             )}
           </FormItem>
           <FormItem>

@@ -14,11 +14,13 @@ const app = dva({
 app.use(createLoading({ effects: true }));
 
 // 3. Model
-app.model(require("./models/admin").default);
 app.model(require("./models/login").default);
+app.model(require("./models/admin").default);
 
 // 4. Router for browserHistory dynamic load
 app.router(require("./router").default);
 
 // 5. Start
 app.start("#root");
+
+export default app;

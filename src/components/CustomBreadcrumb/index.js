@@ -3,7 +3,7 @@ import { Breadcrumb } from "antd";
 import { Link } from "react-router-dom";
 
 const CustomBreadcrumb = props => (
-  <Breadcrumb style={{ marginBottom: 16 }}>
+  <Breadcrumb style={{ paddingBottom: 16 }}>
     <Breadcrumb.Item>
       <Link to="/home">首页</Link>
     </Breadcrumb.Item>

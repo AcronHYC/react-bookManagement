@@ -12,6 +12,7 @@ const menus = [
     title: "管理员管理",
     icon: "lock",
     key: "/home/adminManagemment",
+    // models: () => [import("../../models/admin")],
     subs: [
       {
         key: "/home/adminManagemment/updateAdmin",

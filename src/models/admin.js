@@ -1,7 +1,8 @@
 import {
   queryAdminByParams,
   queryAdminByPage,
-  queryAdminByFuzzyAndPage
+  queryAdminByFuzzyAndPage,
+  addAdmin
 } from "../services/admin";
 
 export default {
@@ -9,19 +10,20 @@ export default {
 
   state: {
     list: [],
-    pagination: {}
+    pagination: {},
+    isAddSuccess: false
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(location => {
         console.log(location.pathname);
-        if (location.pathname === "/home/adminManagemment/queryAdmin") {
-          dispatch({
-            type: "queryAdminByPage",
-            payload: {}
-          });
-        }
+        // if (location.pathname === "/home/adminManagemment/queryAdmin") {
+        // dispatch({
+        //   type: "queryAdminByPage",
+        //   payload: {}
+        // });
+        // }
       });
     }
   },
@@ -66,6 +68,15 @@ export default {
           }
         });
       }
+    },
+    *addAdmin({ payload }, { select, call, put }) {
+      const response = yield call(addAdmin, payload);
+      yield put({
+        type: "updateState",
+        payload: {
+          isAddSuccess: response.result
+        }
+      });
     }
   },
 

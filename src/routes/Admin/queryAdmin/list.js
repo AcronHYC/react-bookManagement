@@ -36,7 +36,7 @@ class List extends React.Component {
         width: 100
       },
       {
-        title: "电话",
+        title: "手机号码",
         dataIndex: "telephone",
         width: 200,
         sorter: (a, b) => a.telephone - b.telephone
@@ -49,9 +49,8 @@ class List extends React.Component {
       },
       {
         title: "权限",
-        dataIndex: "role",
-        width: 150,
-        sorter: (a, b) => a.role - b.role
+        dataIndex: "roleName",
+        width: 150
       },
       {
         title: "操作",
@@ -69,6 +68,7 @@ class List extends React.Component {
       total: pagination.total,
       onChange: (page, pageSize) => {
         console.log("切换后的页码：" + page + "，每页数据数量：" + pageSize);
+        console.log(filterValue);
         if (filterValue !== undefined && filterValue.length > 0) {
           let params = {
             page: page,
