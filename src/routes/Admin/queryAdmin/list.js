@@ -68,11 +68,13 @@ class List extends React.Component {
             uuid: this.state.selectedUuid
           }
         });
+        setTimeout(() => {
+          dispatch({
+            type: "admin/queryAdminByPage",
+            payload: {}
+          });
+        }, 500);
         message.success("更新权限成功！");
-        dispatch({
-          type: "admin/queryAdminByPage",
-          payload: {}
-        });
         toggleModal();
       }
     };
@@ -162,11 +164,13 @@ class List extends React.Component {
                         uuid: record.uuid
                       }
                     });
+                    setTimeout(() => {
+                      dispatch({
+                        type: "admin/queryAdminByPage",
+                        payload: {}
+                      });
+                    }, 500);
                     message.success("删除成功!");
-                    dispatch({
-                      type: "admin/queryAdminByPage",
-                      payload: {}
-                    });
                   }
                 }}
               >
@@ -192,7 +196,6 @@ class List extends React.Component {
       total: pagination.total,
       onChange: (page, pageSize) => {
         console.log("切换后的页码：" + page + "，每页数据数量：" + pageSize);
-        console.log(filterValue);
         if (filterValue !== undefined && filterValue.length > 0) {
           let params = {
             page: page,

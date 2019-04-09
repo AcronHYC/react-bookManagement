@@ -17,6 +17,10 @@ const QueryReader = LoadableComponent(() =>
   import("../../routes/Reader/queryReader")
 );
 
+const AddReader = LoadableComponent(() =>
+  import("../../routes/Reader/addReader")
+);
+
 class ContentMain extends Component {
   render() {
     // const QueryAdmin = dynamic({
@@ -47,6 +51,11 @@ class ContentMain extends Component {
             exact
             path="/home/readerManagement/queryReader"
             component={QueryReader}
+          />
+          <PrivateRoute
+            exact
+            path="/home/readerManagement/addReader"
+            component={AddReader}
           />
           <Redirect exact from="/" to="/home" />
         </Switch>

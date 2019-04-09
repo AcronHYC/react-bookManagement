@@ -25,7 +25,7 @@ class Filter extends Component {
         <Option value="adminName">用户名</Option>
         <Option value="realName">真实姓名</Option>
         <Option value="sex">性别</Option>
-        <Option value="telephone">电话</Option>
+        <Option value="telephone">手机号码</Option>
         <Option value="email">邮箱</Option>
         <Option value="roleName">权限</Option>
       </Select>

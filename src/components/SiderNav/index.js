@@ -44,6 +44,12 @@ const menus = [
         title: "查看读者信息",
         icon: "",
         role: ["1", "2", "3"]
+      },
+      {
+        key: "/home/readerManagement/addReader",
+        title: "新增读者",
+        icon: "",
+        role: ["1", "2", "3"]
       }
     ]
   },
