@@ -1,12 +1,8 @@
 import React from "react";
-import { Icon, Badge, Dropdown, Menu, Modal, Popconfirm } from "antd";
+import { Icon, Badge, Dropdown, Menu, Modal, Popconfirm, message } from "antd";
 import screenfull from "screenfull";
 import { Link, withRouter } from "react-router-dom";
-import {
-  isAuthenticated,
-  authenticateSuccess,
-  logout
-} from "../../utils/cookie";
+import { logout } from "../../utils/session";
 
 class HeaderBar extends React.Component {
   constructor(props) {
@@ -42,6 +38,7 @@ class HeaderBar extends React.Component {
   onOk = () => {
     logout();
     this.history.push("/login");
+    message.success("登出成功!");
   };
 
   render() {

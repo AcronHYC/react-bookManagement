@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "dva";
 import { Spin, Button } from "antd";
 import LoginForm from "./LoginForm";
-import { isAuthenticated } from "../../utils/cookie";
+import { isAuthenticated } from "../../utils/session";
 import styles from "./style.css";
 
 class Login extends Component {
@@ -12,15 +12,10 @@ class Login extends Component {
     this.history = this.props.history;
   }
 
-  componentWillMount() {
-    console.log(document.cookie);
-    if (isAuthenticated("uuid")) {
-      console.log("Your cookie uuid:" + isAuthenticated("uuid"));
+  componentDidMount() {
+    if (isAuthenticated("loginUser")) {
       this.history.push("/");
     }
-  }
-
-  componentDidMount() {
     this.dispatch({
       type: "login/queryAdminByParams",
       payload: {

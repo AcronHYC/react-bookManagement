@@ -23,7 +23,14 @@ export function queryAdminByFuzzyAndPage(params) {
 
 export function addAdmin(params) {
   return sendRequest("/api/admin/addAdmin", {
-    method: "GET",
+    method: "POST",
+    params: params
+  });
+}
+
+export function updateAdmin(params) {
+  return sendRequest("/api/admin/updateAdmin", {
+    method: "POST",
     params: params
   });
 }

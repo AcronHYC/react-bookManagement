@@ -2,7 +2,8 @@ import {
   queryAdminByParams,
   queryAdminByPage,
   queryAdminByFuzzyAndPage,
-  addAdmin
+  addAdmin,
+  updateAdmin
 } from "../services/admin";
 
 export default {
@@ -11,7 +12,8 @@ export default {
   state: {
     list: [],
     pagination: {},
-    isAddSuccess: false
+    isAddSuccess: false,
+    isUpdateSuccess: false
   },
 
   subscriptions: {
@@ -75,6 +77,15 @@ export default {
         type: "updateState",
         payload: {
           isAddSuccess: response.result
+        }
+      });
+    },
+    *updateAdmin({ payload }, { select, call, put }) {
+      const response = yield call(updateAdmin, payload);
+      yield put({
+        type: "updateState",
+        payload: {
+          isUpdateSuccess: response.result
         }
       });
     }

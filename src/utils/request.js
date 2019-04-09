@@ -73,8 +73,7 @@ export async function sendRequest(url, options) {
     initObj = {
       method: options.method,
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+        "Content-Type": "application/json; charset=utf-8"
       },
       body: jsonData,
       credentials: "include"

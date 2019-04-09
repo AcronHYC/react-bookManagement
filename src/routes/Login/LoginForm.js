@@ -1,11 +1,7 @@
 import React, { Component } from "react";
 import { Button, Form, Input, Icon, Checkbox, message } from "antd";
 import QueueAnim from "rc-queue-anim";
-import {
-  isAuthenticated,
-  authenticateSuccess,
-  logout
-} from "../../utils/cookie";
+import { isAuthenticated, setSessionStorage } from "../../utils/session";
 import { withRouter } from "react-router-dom";
 
 const FormItem = Form.Item;
@@ -30,7 +26,7 @@ class LoginForm extends Component {
           ) {
             let loginUser = item;
             flag = true;
-            authenticateSuccess(loginUser);
+            setSessionStorage("loginUser", JSON.stringify(loginUser));
             history.push("/");
             message.success("登录成功!");
           }
