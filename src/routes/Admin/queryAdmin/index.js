@@ -23,8 +23,8 @@ class QueryAdmin extends Component {
   }
 
   render() {
-    const { dispatch, admin, loading } = this.props;
-    const { list, pagination } = admin;
+    const { dispatch, admin, loading, history } = this.props;
+    const { list, pagination, selectAdmin } = admin;
 
     const filterProps = {
       loading,
@@ -43,10 +43,13 @@ class QueryAdmin extends Component {
 
     const listProps = {
       dispatch,
+      history,
       pagination,
       filterValue: this.state.filterValue,
       selectedKey: this.state.selectedKey,
       dataSource: list,
+      selectAdmin,
+      loading,
       isLoading: loading.effects["admin/queryAdminByPage"]
     };
 

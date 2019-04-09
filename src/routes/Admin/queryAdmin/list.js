@@ -1,61 +1,185 @@
 import React, { Component } from "react";
-import { Table } from "antd";
+import { Table, Icon, Button, Popconfirm, message, Modal, Select } from "antd";
 import { withRouter } from "react-router-dom";
 import styles from "./styles.css";
 import objectAssign from "object-assign";
+import {
+  isAuthenticated,
+  setSessionStorage,
+  logout
+} from "../../../utils/session";
+
+const Option = Select.Option;
 
 class List extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  state = {
+    disabledButton: true,
+    modalShow: false,
+    selectedKey: "3",
+    selectedUuid: ""
+  };
+
+  componentWillMount() {
+    const role = JSON.parse(isAuthenticated("loginUser")).role;
+    if (role === "1") {
+      this.setState({
+        disabledButton: false
+      });
+    }
+  }
+
   render() {
     const {
       dispatch,
       dataSource,
+      selectAdmin,
       isLoading,
       pagination,
       filterValue,
-      selectedKey
+      selectedKey,
+      history,
+      loading
     } = this.props;
+
+    const toggleModal = () => {
+      this.setState({
+        modalShow: !this.state.modalShow
+      });
+    };
+
+    const onSelectChange = value => {
+      this.setState({
+        selectedKey: value
+      });
+    };
+
+    const onOk = () => {
+      if (this.state.selectedKey === selectAdmin.role) {
+        toggleModal();
+      } else {
+        dispatch({
+          type: "admin/updateAdmin",
+          payload: {
+            role: this.state.selectedKey,
+            uuid: this.state.selectedUuid
+          }
+        });
+        message.success("更新权限成功！");
+        dispatch({
+          type: "admin/queryAdminByPage",
+          payload: {}
+        });
+        toggleModal();
+      }
+    };
 
     const columns = [
       {
         title: "用户名",
         dataIndex: "adminName",
-        width: 150
+        width: 200,
+        align: "center"
       },
       {
         title: "真实姓名",
         dataIndex: "realName",
-        width: 150
+        width: 200,
+        align: "center"
       },
       {
         title: "性别",
         dataIndex: "sex",
-        width: 100
+        width: 100,
+        align: "center"
       },
       {
         title: "手机号码",
         dataIndex: "telephone",
         width: 200,
-        sorter: (a, b) => a.telephone - b.telephone
+        align: "center"
       },
       {
         title: "邮箱",
         dataIndex: "email",
         width: 200,
-        sorter: (a, b) => a.email.length - b.email.length
+        align: "center"
       },
       {
         title: "权限",
         dataIndex: "roleName",
-        width: 150
+        width: 150,
+        align: "center"
       },
       {
         title: "操作",
         dataIndex: "operation",
-        width: 200
+        width: 200,
+        align: "center",
+        render: (text, record, index) => {
+          return (
+            <span>
+              <Button
+                icon="edit"
+                type="primary"
+                shape="circle"
+                disabled={this.state.disabledButton}
+                onClick={() => {
+                  this.setState({
+                    selectedUuid: record.uuid
+                  });
+                  dispatch({
+                    type: "admin/queryAdminByParams",
+                    payload: {
+                      uuid: record.uuid
+                    }
+                  });
+                  toggleModal();
+                }}
+              />
+              &nbsp;&nbsp;&nbsp;
+              <Popconfirm
+                title="确定删除该行数据吗"
+                onConfirm={() => {
+                  let loginUuid = JSON.parse(isAuthenticated("loginUser")).uuid;
+                  if (loginUuid === record.uuid) {
+                    dispatch({
+                      type: "admin/deleteAdmin",
+                      payload: {
+                        uuid: record.uuid
+                      }
+                    });
+                    message.success("您删除了自己的数据，现退出登录！");
+                    logout();
+                    history.push("/login");
+                  } else {
+                    dispatch({
+                      type: "admin/deleteAdmin",
+                      payload: {
+                        uuid: record.uuid
+                      }
+                    });
+                    message.success("删除成功!");
+                    dispatch({
+                      type: "admin/queryAdminByPage",
+                      payload: {}
+                    });
+                  }
+                }}
+              >
+                <Button
+                  icon="delete"
+                  type="primary"
+                  shape="circle"
+                  disabled={this.state.disabledButton}
+                />
+              </Popconfirm>
+            </span>
+          );
+        }
       }
     ];
 
@@ -131,6 +255,19 @@ class List extends React.Component {
           loading={isLoading}
           pagination={page}
         />
+        <Modal
+          title="编辑"
+          visible={this.state.modalShow}
+          onCancel={toggleModal}
+          onOk={onOk}
+        >
+          &nbsp;&nbsp;&nbsp;&nbsp; 只能修改该管理员的权限：
+          <Select onChange={onSelectChange} defaultValue="3">
+            <Option value="1">超级管理员</Option>
+            <Option value="2">高级管理员</Option>
+            <Option value="3">普通管理员</Option>
+          </Select>
+        </Modal>
       </div>
     );
   }

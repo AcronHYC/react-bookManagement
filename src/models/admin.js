@@ -3,7 +3,8 @@ import {
   queryAdminByPage,
   queryAdminByFuzzyAndPage,
   addAdmin,
-  updateAdmin
+  updateAdmin,
+  deleteAdmin
 } from "../services/admin";
 
 export default {
@@ -12,8 +13,10 @@ export default {
   state: {
     list: [],
     pagination: {},
+    selectAdmin: {},
     isAddSuccess: false,
-    isUpdateSuccess: false
+    isUpdateSuccess: false,
+    isDeleteSuccess: false
   },
 
   subscriptions: {
@@ -35,12 +38,21 @@ export default {
       const response = yield call(queryAdminByParams, payload);
       if (response.result) {
         let list = response.result;
-        yield put({
-          type: "updateState",
-          payload: {
-            list
-          }
-        });
+        if (list.length === 1) {
+          yield put({
+            type: "updateState",
+            payload: {
+              selectAdmin: list[0]
+            }
+          });
+        } else {
+          yield put({
+            type: "updateState",
+            payload: {
+              list
+            }
+          });
+        }
       }
     },
     *queryAdminByPage({ payload }, { select, call, put }) {
@@ -86,6 +98,15 @@ export default {
         type: "updateState",
         payload: {
           isUpdateSuccess: response.result
+        }
+      });
+    },
+    *deleteAdmin({ payload }, { select, call, put }) {
+      const response = yield call(deleteAdmin, payload);
+      yield put({
+        type: "updateState",
+        payload: {
+          isDeleteSuccess: response.result
         }
       });
     }

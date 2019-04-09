@@ -17,30 +17,59 @@ const menus = [
       {
         key: "/home/adminManagemment/updateAdmin",
         title: "修改资料",
-        icon: ""
+        icon: "",
+        role: ["1", "2", "3"]
       },
       {
         key: "/home/adminManagemment/queryAdmin",
         title: "管理员列表",
-        icon: ""
+        icon: "",
+        role: ["1", "2", "3"]
       },
-      { key: "/home/adminManagemment/addAdmin", title: "新增管理员", icon: "" }
+      {
+        key: "/home/adminManagemment/addAdmin",
+        title: "新增管理员",
+        icon: "",
+        role: ["1"]
+      }
     ]
   },
   {
     title: "读者管理",
     icon: "user",
     key: "/home/readerManagement",
-    subs: [{ key: "readerManagement", title: "查看读者信息", icon: "" }]
+    subs: [
+      {
+        key: "/home/readerManagement/queryReader",
+        title: "查看读者信息",
+        icon: "",
+        role: ["1", "2", "3"]
+      }
+    ]
   },
   {
     title: "图书管理",
     icon: "book",
     key: "/home/bookManagemment",
     subs: [
-      { key: "/home/bookManagemment/queryBook", title: "图书列表", icon: "" },
-      { key: "/home/bookManagemment/addBook", title: "新增图书", icon: "" },
-      { key: "/home/bookManagemment/addBookClass", title: "新增分类", icon: "" }
+      {
+        key: "/home/bookManagemment/queryBook",
+        title: "图书列表",
+        icon: "",
+        role: ["1", "2", "3"]
+      },
+      {
+        key: "/home/bookManagemment/addBook",
+        title: "新增图书",
+        icon: "",
+        role: ["1", "2"]
+      },
+      {
+        key: "/home/bookManagemment/addBookClass",
+        title: "新增分类",
+        icon: "",
+        role: ["1", "2"]
+      }
     ]
   },
   {
@@ -51,12 +80,14 @@ const menus = [
       {
         key: "/home/circulateManagemment/borrowBook",
         title: "借书管理",
-        icon: ""
+        icon: "",
+        role: ["1", "2", "3"]
       },
       {
         key: "/home/circulateManagemment/lendBook",
         title: "还书管理",
-        icon: ""
+        icon: "",
+        role: ["1", "2", "3"]
       }
     ]
   }

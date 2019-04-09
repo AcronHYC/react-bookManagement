@@ -13,6 +13,10 @@ const UpdateAdmin = LoadableComponent(() =>
   import("../../routes/Admin/updateAdmin")
 );
 
+const QueryReader = LoadableComponent(() =>
+  import("../../routes/Reader/queryReader")
+);
+
 class ContentMain extends Component {
   render() {
     // const QueryAdmin = dynamic({
@@ -38,6 +42,11 @@ class ContentMain extends Component {
             exact
             path="/home/adminManagemment/updateAdmin"
             component={UpdateAdmin}
+          />
+          <PrivateRoute
+            exact
+            path="/home/readerManagement/queryReader"
+            component={QueryReader}
           />
           <Redirect exact from="/" to="/home" />
         </Switch>

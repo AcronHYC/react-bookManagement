@@ -1,7 +1,11 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { Menu, Icon } from "antd";
-
+import {
+  logout,
+  isAuthenticated,
+  setSessionStorage
+} from "../../utils/session";
 class CustomMenu extends React.Component {
   state = {
     openKeys: [],
@@ -71,6 +75,7 @@ class CustomMenu extends React.Component {
     );
   };
   renderSubMenu = ({ key, icon, title, subs }) => {
+    let role = JSON.parse(isAuthenticated("loginUser")).role;
     return (
       <Menu.SubMenu
         key={key}
@@ -83,9 +88,11 @@ class CustomMenu extends React.Component {
       >
         {subs &&
           subs.map(item => {
-            return item.subs && item.subs.length > 0
-              ? this.renderSubMenu(item)
-              : this.renderMenuItem(item);
+            if (item.role.indexOf(role) >= 0) {
+              return item.subs && item.subs.length > 0
+                ? this.renderSubMenu(item)
+                : this.renderMenuItem(item);
+            }
           })}
       </Menu.SubMenu>
     );
