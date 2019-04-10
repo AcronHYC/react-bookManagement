@@ -56,23 +56,17 @@ const menus = [
   {
     title: "图书管理",
     icon: "book",
-    key: "/home/bookManagemment",
+    key: "/home/bookManagement",
     subs: [
       {
-        key: "/home/bookManagemment/queryBook",
+        key: "/home/bookManagement/queryBook",
         title: "图书列表",
         icon: "",
         role: ["1", "2", "3"]
       },
       {
-        key: "/home/bookManagemment/addBook",
-        title: "新增图书",
-        icon: "",
-        role: ["1", "2"]
-      },
-      {
-        key: "/home/bookManagemment/addBookClass",
-        title: "新增分类",
+        key: "/home/bookManagement/addBook",
+        title: "新增图书及分类",
         icon: "",
         role: ["1", "2"]
       }

@@ -16,9 +16,16 @@ const UpdateAdmin = LoadableComponent(() =>
 const QueryReader = LoadableComponent(() =>
   import("../../routes/Reader/queryReader")
 );
-
 const AddReader = LoadableComponent(() =>
   import("../../routes/Reader/addReader")
+);
+
+const AddBook = LoadableComponent(() => import("../../routes/Book/addBook"));
+const QueryBook = LoadableComponent(() =>
+  import("../../routes/Book/queryBook")
+);
+const UpdateBook = LoadableComponent(() =>
+  import("../../routes/Book/updateBook")
 );
 
 class ContentMain extends Component {
@@ -32,6 +39,7 @@ class ContentMain extends Component {
     return (
       <div style={{ padding: 16, position: "relative" }}>
         <Switch>
+          {/* 管理员模块路由 */}
           <PrivateRoute
             exact
             path="/home/adminManagemment/queryAdmin"
@@ -47,6 +55,8 @@ class ContentMain extends Component {
             path="/home/adminManagemment/updateAdmin"
             component={UpdateAdmin}
           />
+
+          {/* 读者模块路由 */}
           <PrivateRoute
             exact
             path="/home/readerManagement/queryReader"
@@ -57,6 +67,24 @@ class ContentMain extends Component {
             path="/home/readerManagement/addReader"
             component={AddReader}
           />
+
+          {/* 图书模块路由 */}
+          <PrivateRoute
+            exact
+            path="/home/bookManagement/addBook"
+            component={AddBook}
+          />
+          <PrivateRoute
+            exact
+            path="/home/bookManagement/queryBook"
+            component={QueryBook}
+          />
+          <PrivateRoute
+            exact
+            path="/home/bookManagement/updateBook"
+            component={UpdateBook}
+          />
+
           <Redirect exact from="/" to="/home" />
         </Switch>
       </div>
