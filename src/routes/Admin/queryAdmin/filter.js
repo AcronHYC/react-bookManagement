@@ -34,6 +34,10 @@ class Filter extends Component {
     const resetFields = e => {
       e.preventDefault();
       this.props.form.resetFields();
+      dispatch({
+        type: "admin/queryAdminByPage",
+        payload: {}
+      });
     };
 
     const handleSubmit = e => {
@@ -87,6 +91,7 @@ class Filter extends Component {
               icon="reload"
               htmlType="reset"
               onClick={resetFields}
+              loading={loading.effects["admin/queryAdminByPage"]}
             />
           </FormItem>
         </Form>

@@ -8,12 +8,6 @@ import zh_CN from "antd/lib/locale-provider/zh_CN";
 import dynamic from "dva/dynamic";
 
 function RouterConfig({ history, app }) {
-  const QueryAdmin = dynamic({
-    app,
-    models: () => [import("./models/admin")],
-    component: () => import("./routes/Admin/queryAdmin")
-  });
-
   return (
     <BrowserRouter history={browserHistory}>
       <LocaleProvider locale={zh_CN}>
