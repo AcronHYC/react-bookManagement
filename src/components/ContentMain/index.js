@@ -28,6 +28,10 @@ const UpdateBook = LoadableComponent(() =>
   import("../../routes/Book/updateBook")
 );
 
+const QueryBorrow = LoadableComponent(() =>
+  import("../../routes/Borrow/queryBorrow")
+);
+
 class ContentMain extends Component {
   render() {
     // const QueryAdmin = dynamic({
@@ -83,6 +87,13 @@ class ContentMain extends Component {
             exact
             path="/home/bookManagement/updateBook"
             component={UpdateBook}
+          />
+
+          {/* 借阅模块路由 */}
+          <PrivateRoute
+            exact
+            path="/home/circulateManagemment/borrowHistory"
+            component={QueryBorrow}
           />
 
           <Redirect exact from="/" to="/home" />

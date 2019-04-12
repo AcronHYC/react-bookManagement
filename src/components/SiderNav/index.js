@@ -78,14 +78,8 @@ const menus = [
     key: "/home/circulateManagemment",
     subs: [
       {
-        key: "/home/circulateManagemment/borrowBook",
-        title: "借书管理",
-        icon: "",
-        role: ["1", "2", "3"]
-      },
-      {
-        key: "/home/circulateManagemment/lendBook",
-        title: "还书管理",
+        key: "/home/circulateManagemment/borrowHistory",
+        title: "借还记录",
         icon: "",
         role: ["1", "2", "3"]
       }
