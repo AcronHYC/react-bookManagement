@@ -12,36 +12,18 @@ class Login extends Component {
     this.history = this.props.history;
   }
 
-  componentDidMount() {
-    if (isAuthenticated("loginUser")) {
-      this.history.push("/");
-    }
-    this.dispatch({
-      type: "login/queryAdminByParams",
-      payload: {
-        admin: {}
-      }
-    });
-  }
-
   render() {
-    const { history, dispatch, login, loading } = this.props;
-    const { list } = login;
+    const { history, dispatch, loading } = this.props;
 
     const loginProps = {
       dispatch,
-      dataSource: list,
-      history
+      history,
+      loading
     };
 
     return (
       <div className={styles.loginForm}>
-        <Spin
-          tip="加载中..."
-          spinning={loading.effects["login/queryAdminByParams"]}
-        >
-          <LoginForm {...loginProps} />
-        </Spin>
+        <LoginForm {...loginProps} />
       </div>
     );
   }

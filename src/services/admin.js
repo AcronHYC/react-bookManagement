@@ -41,3 +41,10 @@ export function deleteAdmin(params) {
     params: params
   });
 }
+
+export function login(params) {
+  return sendRequest("/api/admin/login", {
+    method: "POST",
+    params: params
+  });
+}

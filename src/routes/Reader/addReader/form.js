@@ -114,14 +114,18 @@ class AddForm extends Component {
         if (!err) {
           dispatch({
             type: "reader/addReader",
-            payload: values
-          });
-          message.success("添加读者成功!");
-          this.props.form.resetFields();
-          dispatch({
-            type: "reader/queryUserByParams",
-            payload: {
-              user: {}
+            payload: values,
+            callback: res => {
+              if (res) {
+                message.success("添加读者成功!");
+                this.props.form.resetFields();
+                dispatch({
+                  type: "reader/queryUserByParams",
+                  payload: {
+                    user: {}
+                  }
+                });
+              }
             }
           });
         }

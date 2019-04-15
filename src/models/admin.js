@@ -83,32 +83,23 @@ export default {
         });
       }
     },
-    *addAdmin({ payload }, { select, call, put }) {
+    *addAdmin({ payload, callback }, { select, call, put }) {
       const response = yield call(addAdmin, payload);
-      yield put({
-        type: "updateState",
-        payload: {
-          isAddSuccess: response.result
-        }
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     },
-    *updateAdmin({ payload }, { select, call, put }) {
+    *updateAdmin({ payload, callback }, { select, call, put }) {
       const response = yield call(updateAdmin, payload);
-      yield put({
-        type: "updateState",
-        payload: {
-          isUpdateSuccess: response.result
-        }
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     },
-    *deleteAdmin({ payload }, { select, call, put }) {
+    *deleteAdmin({ payload, callback }, { select, call, put }) {
       const response = yield call(deleteAdmin, payload);
-      yield put({
-        type: "updateState",
-        payload: {
-          isDeleteSuccess: response.result
-        }
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     }
   },
 

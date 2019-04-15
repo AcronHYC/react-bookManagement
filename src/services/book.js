@@ -69,3 +69,17 @@ export function queryBorrowByFuzzyAndPage(params) {
     params: params
   });
 }
+
+export function deleteBorrow(params) {
+  return sendRequest("/api/borrow/deleteBorrow", {
+    method: "POST",
+    params: params
+  });
+}
+
+export function updateBorrow(params) {
+  return sendRequest("/api/borrow/updateBorrow", {
+    method: "POST",
+    params: params
+  });
+}

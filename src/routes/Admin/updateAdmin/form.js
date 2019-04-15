@@ -97,9 +97,29 @@ class UpdateForm extends Component {
       }
     };
 
+    const validateOldPwd = (rule, value, callback) => {
+      if (
+        (value === "" || value === undefined || value === null) &&
+        (this.props.form.getFieldValue("password") !== "" &&
+          this.props.form.getFieldValue("password") !== undefined &&
+          this.props.form.getFieldValue("password") !== null)
+      ) {
+        callback("你输入了新密码，请确认旧密码是否正确！");
+      } else if (value && value !== this.state.loginUser.password) {
+        callback("旧密码不正确！");
+      } else {
+        callback();
+      }
+    };
+
     const compareToFirstPassword = (rule, value, callback) => {
       const form = this.props.form;
-      if (value && value !== form.getFieldValue("password")) {
+      if (
+        value !== form.getFieldValue("password") &&
+        (this.props.form.getFieldValue("password") !== "" &&
+          this.props.form.getFieldValue("password") !== undefined &&
+          this.props.form.getFieldValue("password") !== null)
+      ) {
         callback("两次输入的密码不一致!");
       } else {
         callback();
@@ -129,27 +149,34 @@ class UpdateForm extends Component {
           values["uuid"] = this.state.loginUser.uuid;
           dispatch({
             type: "admin/updateAdmin",
-            payload: values
-          });
-          if (values.role !== this.state.loginUser.role) {
-            message.warn("您的权限已经修改，需要重新登录！");
-            logout();
-            history.push("/login");
-          } else {
-            message.success("修改个人资料成功!");
-            this.setState({
-              loginUser: values
-            });
-            dispatch({
-              type: "admin/queryAdminByParams",
-              payload: {
-                admin: {}
+            payload: values,
+            callback: res => {
+              if (res) {
+                if (values.password === undefined) {
+                  values.password = this.state.loginUser.password;
+                }
+                if (values.role !== this.state.loginUser.role) {
+                  message.warn("您的权限已经修改，需要重新登录！");
+                  logout();
+                  history.push("/login");
+                } else {
+                  message.success("修改个人资料成功!");
+                  this.setState({
+                    loginUser: values
+                  });
+                  dispatch({
+                    type: "admin/queryAdminByParams",
+                    payload: {
+                      admin: {}
+                    }
+                  });
+                  logout();
+                  setSessionStorage("loginUser", JSON.stringify(values));
+                  this.props.form.resetFields();
+                }
               }
-            });
-            logout();
-            setSessionStorage("loginUser", JSON.stringify(values));
-            this.props.form.resetFields();
-          }
+            }
+          });
         }
       });
     };
@@ -166,14 +193,23 @@ class UpdateForm extends Component {
               ]
             })(<Input placeholder="请输入用户名" style={{ width: "250px" }} />)}
           </FormItem>
-          <FormItem label="密码">
-            {getFieldDecorator("password", {
-              initialValue: this.state.loginUser.password,
+          <FormItem label="旧密码">
+            {getFieldDecorator("old_password", {
               rules: [
                 {
-                  required: true,
-                  message: "密码不能为空!"
-                },
+                  validator: validateOldPwd
+                }
+              ]
+            })(
+              <Input.Password
+                style={{ width: "250px" }}
+                placeholder="请输入旧密码"
+              />
+            )}
+          </FormItem>
+          <FormItem label="新密码">
+            {getFieldDecorator("password", {
+              rules: [
                 {
                   validator: validateToNextPassword
                 }
@@ -187,12 +223,7 @@ class UpdateForm extends Component {
           </FormItem>
           <FormItem label="确认密码">
             {getFieldDecorator("confirm", {
-              initialValue: this.state.loginUser.password,
               rules: [
-                {
-                  required: true,
-                  message: "请确认你的密码!"
-                },
                 {
                   validator: compareToFirstPassword
                 }

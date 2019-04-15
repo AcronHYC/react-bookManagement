@@ -43,14 +43,18 @@ class AddBook extends Component {
         if (!err) {
           dispatch({
             type: "book/addBookClass",
-            payload: values
+            payload: values,
+            callback: res => {
+              if (res) {
+                message.success("添加图书分类成功!");
+                setTimeout(() => {
+                  dispatch({
+                    type: "book/queryBookClass"
+                  });
+                }, 300);
+              }
+            }
           });
-          message.success("添加图书分类成功!");
-          setTimeout(() => {
-            dispatch({
-              type: "book/queryBookClass"
-            });
-          }, 500);
           this.setState({
             visible: false
           });
@@ -64,18 +68,22 @@ class AddBook extends Component {
         if (!err) {
           dispatch({
             type: "book/deleteBookClass",
-            payload: values
+            payload: values,
+            callback: res => {
+              if (res) {
+                message.success("删除图书分类成功!");
+                setTimeout(() => {
+                  dispatch({
+                    type: "book/queryBookClass"
+                  });
+                }, 300);
+                this.setState({
+                  visible2: false
+                });
+                this.refs.form2.resetFields();
+              }
+            }
           });
-          message.success("删除图书分类成功!");
-          setTimeout(() => {
-            dispatch({
-              type: "book/queryBookClass"
-            });
-          }, 500);
-          this.setState({
-            visible2: false
-          });
-          this.refs.form2.resetFields();
         }
       });
     };

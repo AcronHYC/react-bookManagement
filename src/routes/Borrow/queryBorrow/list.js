@@ -16,8 +16,17 @@ import {
   logout
 } from "../../../utils/session";
 import appUtils from "../../../utils/app-utils";
+import EditForm from "../queryBorrow/editBorrowForm";
+import moment from "moment";
+import "moment/locale/zh-cn";
+moment.locale("zh-cn");
 
 class List extends React.Component {
+  state = {
+    visible: false,
+    selectRecord: {}
+  };
+
   render() {
     const {
       dispatch,
@@ -30,7 +39,9 @@ class List extends React.Component {
       filterPrams,
       stateKey,
       userList,
-      borrowList
+      borrowList,
+      isDeleteBorrowSuccess,
+      isUpdateBorrowSuccess
     } = this.props;
 
     const columns = [
@@ -79,19 +90,81 @@ class List extends React.Component {
         align: "center"
       },
       {
+        title: "实际借阅天数",
+        dataIndex: "real_borrow_day",
+        align: "center",
+        render: (text, record, index) => {
+          return record.real_borrow_day ? record.real_borrow_day : "尚未归还";
+        }
+      },
+      {
         title: "逾期天数",
         dataIndex: "overdue",
         align: "center",
         render: (text, record, index) => {
-          return record.overdue ? record.overdue : 0;
+          return record.overdue ? record.overdue : "尚未归还";
         }
       },
       {
         title: "操作",
         dataIndex: "operation",
-        align: "center"
+        align: "center",
+        render: (text, record, index) => {
+          if (stateKey === "已还") {
+            return (
+              <Popconfirm
+                title="确定删除该行数据吗"
+                onConfirm={() => {
+                  dispatch({
+                    type: "book/deleteBorrow",
+                    payload: {
+                      uuid: record.uuid
+                    },
+                    callback: res => {
+                      if (res) {
+                        console.log("删除借阅记录：" + isDeleteBorrowSuccess);
+                        message.success("删除成功！");
+                        setTimeout(() => {
+                          dispatch({
+                            type: "book/queryBorrowByFuzzyAndPage",
+                            payload: {
+                              status: stateKey
+                            }
+                          });
+                        }, 200);
+                      }
+                    }
+                  });
+                }}
+              >
+                <Button icon="delete" type="primary" shape="circle" />
+              </Popconfirm>
+            );
+          } else {
+            return (
+              <Button
+                icon="edit"
+                type="primary"
+                shape="circle"
+                onClick={() => {
+                  this.setState({
+                    visible: true,
+                    selectRecord: record
+                  });
+                }}
+              />
+            );
+          }
+        }
       }
     ];
+
+    const formProps = {
+      selectRecord: this.state.selectRecord,
+      history,
+      loading,
+      dispatch
+    };
 
     const page = {
       showQuickJumper: true,
@@ -144,6 +217,38 @@ class List extends React.Component {
       }
     };
 
+    const onOk = () => {
+      this.refs.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          values["uuid"] = this.state.selectRecord.uuid;
+          values["back_date"] = moment(values["back_date"]).format(
+            "YYYY-MM-DD"
+          );
+          values["book_uuid"] = this.state.selectRecord.book_uuid;
+          dispatch({
+            type: "book/updateBorrow",
+            payload: values,
+            callback: res => {
+              if (res) {
+                message.success("更新成功!");
+                setTimeout(() => {
+                  dispatch({
+                    type: "book/queryBorrowByFuzzyAndPage",
+                    payload: {
+                      status: stateKey
+                    }
+                  });
+                }, 200);
+              }
+            }
+          });
+          this.setState({
+            visible: false
+          });
+        }
+      });
+    };
+
     return (
       <div
         style={{
@@ -161,6 +266,20 @@ class List extends React.Component {
           loading={isLoading}
           pagination={page}
         />
+        <Modal
+          style={{ top: 20 }}
+          title="编辑借阅记录"
+          visible={this.state.visible}
+          destroyOnClose={true}
+          onOk={onOk}
+          onCancel={() => {
+            this.setState({
+              visible: false
+            });
+          }}
+        >
+          <EditForm ref="form" {...formProps} />
+        </Modal>
       </div>
     );
   }

@@ -77,16 +77,20 @@ class AddForm extends Component {
         if (!err) {
           dispatch({
             type: "book/addBook",
-            payload: values
+            payload: values,
+            callback: res => {
+              if (res) {
+                message.success("新增图书成功!");
+                setTimeout(() => {
+                  dispatch({
+                    type: "book/queryBookByParams",
+                    payload: {}
+                  });
+                }, 500);
+                this.props.form.resetFields();
+              }
+            }
           });
-          message.success("新增图书成功!");
-          setTimeout(() => {
-            dispatch({
-              type: "book/queryBookByParams",
-              payload: {}
-            });
-          }, 500);
-          this.props.form.resetFields();
         }
       });
     };

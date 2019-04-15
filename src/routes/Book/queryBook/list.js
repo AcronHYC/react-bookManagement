@@ -84,21 +84,23 @@ class List extends React.Component {
           };
           dispatch({
             type: "book/addBorrow",
-            payload: param
-          });
-          message.success("添加成功!");
-          this.refs.form.resetFields();
-          this.setState({
-            visible: false
-          });
-          setTimeout(() => {
-            dispatch({
-              type: "book/queryBookByFuzzyAndPage",
-              payload: {
-                state: stateKey
+            payload: param,
+            callback: res => {
+              if (res) {
+                message.success("添加成功!");
+                this.refs.form.resetFields();
+                this.setState({
+                  visible: false
+                });
               }
-            });
-          }, 200);
+              dispatch({
+                type: "book/queryBookByFuzzyAndPage",
+                payload: {
+                  state: stateKey
+                }
+              });
+            }
+          });
         }
       });
     };
@@ -171,7 +173,6 @@ class List extends React.Component {
                   type="primary"
                   shape="circle"
                   onClick={() => {
-                    record["flag"] = "1";
                     let path = {
                       pathname: "/home/bookManagement/updateBook",
                       state: {

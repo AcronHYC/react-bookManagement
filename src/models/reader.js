@@ -54,15 +54,12 @@ export default {
         });
       }
     },
-    *addReader({ payload }, { select, call, put }) {
+    *addReader({ payload, callback }, { select, call, put }) {
       console.log(payload);
       const response = yield call(addReader, payload);
-      yield put({
-        type: "updateState",
-        payload: {
-          isAddSuccess: response.result
-        }
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     }
   },
 

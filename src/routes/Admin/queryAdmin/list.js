@@ -152,25 +152,33 @@ class List extends React.Component {
                       type: "admin/deleteAdmin",
                       payload: {
                         uuid: record.uuid
+                      },
+                      callback: res => {
+                        if (res) {
+                          message.success("您删除了自己的数据，现退出登录！");
+                          logout();
+                          history.push("/login");
+                        }
                       }
                     });
-                    message.success("您删除了自己的数据，现退出登录！");
-                    logout();
-                    history.push("/login");
                   } else {
                     dispatch({
                       type: "admin/deleteAdmin",
                       payload: {
                         uuid: record.uuid
+                      },
+                      callback: res => {
+                        if (res) {
+                          setTimeout(() => {
+                            dispatch({
+                              type: "admin/queryAdminByPage",
+                              payload: {}
+                            });
+                          }, 500);
+                          message.success("删除成功!");
+                        }
                       }
                     });
-                    setTimeout(() => {
-                      dispatch({
-                        type: "admin/queryAdminByPage",
-                        payload: {}
-                      });
-                    }, 500);
-                    message.success("删除成功!");
                   }
                 }}
               >

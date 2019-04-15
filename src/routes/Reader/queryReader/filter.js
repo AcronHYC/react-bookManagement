@@ -60,6 +60,7 @@ class Filter extends Component {
     const resetFields = e => {
       e.preventDefault();
       this.props.form.resetFields();
+      inputCallback("");
       dispatch({
         type: "reader/queryUserByFuzzyAndPage",
         payload: {}

@@ -1,4 +1,4 @@
-import { queryAdminByParams } from "../services/admin";
+import { queryAdminByParams, login } from "../services/admin";
 
 export default {
   namespace: "login",
@@ -13,16 +13,11 @@ export default {
   },
 
   effects: {
-    *queryAdminByParams({ payload }, { select, call, put }) {
-      const response = yield call(queryAdminByParams, payload);
+    *login({ payload, callback }, { select, call, put }) {
+      const response = yield call(login, payload);
       if (response.result) {
         let list = response.result;
-        yield put({
-          type: "updateState",
-          payload: {
-            list
-          }
-        });
+        callback(list);
       }
     }
   },

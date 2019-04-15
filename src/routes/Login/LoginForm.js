@@ -13,27 +13,26 @@ class LoginForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataSource, dispatch, history } = this.props;
+    const { dataSource, dispatch, history, loading } = this.props;
 
     const handleSubmit = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
-        let flag = false;
-        dataSource.map(item => {
-          if (
-            item.adminName === values.adminName &&
-            item.password === values.password
-          ) {
-            let loginUser = item;
-            flag = true;
-            setSessionStorage("loginUser", JSON.stringify(loginUser));
-            history.push("/");
-            message.success("登录成功!");
+        dispatch({
+          type: "login/login",
+          payload: values,
+          callback: res => {
+            console.log(res);
+            if (res.error) {
+              message.error(res.error);
+            } else {
+              setSessionStorage("loginUser", JSON.stringify(res.loginUser));
+              localStorage.setItem("token", res.token);
+              history.push("/");
+              message.success("登录成功!");
+            }
           }
         });
-        if (!flag) {
-          message.error("用户名或密码错误!");
-        }
       });
     };
 
@@ -71,7 +70,12 @@ class LoginForm extends Component {
               valuePropName: "checked",
               initialValue: true
             })(<Checkbox>记住密码</Checkbox>)}
-            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ width: "100%" }}
+              loading={loading.effects["login/login"]}
+            >
               登录
             </Button>
           </Form.Item>

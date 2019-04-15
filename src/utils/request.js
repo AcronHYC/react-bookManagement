@@ -64,6 +64,9 @@ export async function sendRequest(url, options) {
       url += "?" + searchStr;
     }
     initObj = {
+      headers: {
+        token: localStorage.getItem("token")
+      },
       method: options.method
     };
   } else if (options.method === REQUSET_METHOD.POST) {
@@ -73,6 +76,7 @@ export async function sendRequest(url, options) {
     initObj = {
       method: options.method,
       headers: {
+        token: localStorage.getItem("token"),
         "Content-Type": "application/json; charset=utf-8"
       },
       body: jsonData,

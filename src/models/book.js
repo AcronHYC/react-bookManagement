@@ -8,7 +8,9 @@ import {
   addBookClass,
   deleteBookClass,
   addBorrow,
-  queryBorrowByFuzzyAndPage
+  queryBorrowByFuzzyAndPage,
+  deleteBorrow,
+  updateBorrow
 } from "../services/book";
 import {
   queryReaderByParams,
@@ -29,7 +31,9 @@ export default {
     isAddBookSuccess: false,
     isAddBookClassSuccess: false,
     isUpdateSuccess: false,
-    isDeleteSuccess: false
+    isDeleteSuccess: false,
+    isDeleteBorrowSuccess: false,
+    isUpdateBorrowSuccess: false
   },
 
   subscriptions: {
@@ -114,56 +118,54 @@ export default {
         });
       }
     },
-    *addBook({ payload }, { select, call, put }) {
+    *addBook({ payload, callback }, { select, call, put }) {
       const response = yield call(addBook, payload);
-      yield put({
-        type: "updateState",
-        payload: {
-          isAddBookSuccess: response.result
-        }
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     },
-    *addBorrow({ payload }, { select, call, put }) {
+    *addBorrow({ payload, callback }, { select, call, put }) {
       console.log(payload);
       const response = yield call(addBorrow, payload);
-      yield put({
-        type: "updateState",
-        payload: {}
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     },
-    *addBookClass({ payload }, { select, call, put }) {
+    *addBookClass({ payload, callback }, { select, call, put }) {
       const response = yield call(addBookClass, payload);
-      yield put({
-        type: "updateState",
-        payload: {
-          isaddBookClassSuccess: response.result
-        }
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     },
-    *updateBook({ payload }, { select, call, put }) {
+    *updateBook({ payload, callback }, { select, call, put }) {
       const response = yield call(updateBook, payload);
-      yield put({
-        type: "updateState",
-        payload: {
-          isUpdateSuccess: response.result
-        }
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     },
-    *deleteBook({ payload }, { select, call, put }) {
+    *updateBorrow({ payload, callback }, { select, call, put }) {
+      const response = yield call(updateBorrow, payload);
+      if (response.result) {
+        callback(response.result);
+      }
+    },
+    *deleteBook({ payload, callback }, { select, call, put }) {
       const response = yield call(deleteBook, payload);
-      yield put({
-        type: "updateState",
-        payload: {
-          isDeleteSuccess: response.result
-        }
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     },
-    *deleteBookClass({ payload }, { select, call, put }) {
+    *deleteBorrow({ payload, callback }, { select, call, put }) {
+      const response = yield call(deleteBorrow, payload);
+      if (response.result) {
+        callback(response.result);
+      }
+    },
+    *deleteBookClass({ payload, callback }, { select, call, put }) {
       const response = yield call(deleteBookClass, payload);
-      yield put({
-        type: "updateState",
-        payload: {}
-      });
+      if (response.result) {
+        callback(response.result);
+      }
     }
   },
 

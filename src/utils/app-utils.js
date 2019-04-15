@@ -39,8 +39,23 @@ const timestampToTime = function(timestamp) {
   return Y + M + D;
 };
 
+const getDay = function(previousDate, nowDate) {
+  let previous = new Date(previousDate.replace(/-/g, "/"));
+  let now = new Date(nowDate.replace(/-/g, "/"));
+  let days = now.getTime() - previous.getTime();
+  let day = parseInt(days / (1000 * 60 * 60 * 24));
+  return day.toString();
+};
+
+const getOverdue = function(real_borrow_day, borrow_day) {
+  let overdue = parseInt(real_borrow_day, 10) - parseInt(borrow_day, 10);
+  return overdue > 0 ? overdue.toString() : "0";
+};
+
 export default {
   removeObjUnAttr: removeObjUnAttr,
   isEmpty: isEmpty,
-  timestampToTime: timestampToTime
+  timestampToTime: timestampToTime,
+  getDay: getDay,
+  getOverdue: getOverdue
 };

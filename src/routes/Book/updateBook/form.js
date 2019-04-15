@@ -247,6 +247,22 @@ class UpdateForm extends Component {
               重置
             </Button>
           </Form.Item>
+          <Form.Item
+            wrapperCol={{
+              xs: { span: 24, offset: 0 },
+              sm: { span: 16, offset: 8 }
+            }}
+          >
+            <Button
+              type="primary"
+              style={{ width: "200px" }}
+              onClick={() => {
+                history.goBack();
+              }}
+            >
+              返回
+            </Button>
+          </Form.Item>
         </Form>
       </div>
     );

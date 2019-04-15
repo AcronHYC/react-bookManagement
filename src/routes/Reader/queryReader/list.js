@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { Table, Icon, Button, Popconfirm, message, Modal, Select } from "antd";
+import {
+  Table,
+  Icon,
+  Button,
+  Popconfirm,
+  message,
+  Modal,
+  Select,
+  Tooltip
+} from "antd";
 import { withRouter } from "react-router-dom";
 import {
   isAuthenticated,
@@ -56,7 +65,31 @@ class List extends React.Component {
         title: "操作",
         dataIndex: "operation",
         width: 200,
-        align: "center"
+        align: "center",
+        render: (text, record, index) => {
+          return (
+            <Tooltip
+              placement="top"
+              title="查看该读者的借书记录"
+              arrowPointAtCenter
+            >
+              <Button
+                icon="search"
+                type="primary"
+                shape="circle"
+                onClick={() => {
+                  let path = {
+                    pathname: "/home/circulateManagemment/borrowHistory",
+                    state: {
+                      record
+                    }
+                  };
+                  history.push(path);
+                }}
+              />
+            </Tooltip>
+          );
+        }
       }
     ];
 

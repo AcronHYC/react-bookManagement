@@ -96,14 +96,16 @@ class AddForm extends Component {
         if (!err) {
           dispatch({
             type: "admin/addAdmin",
-            payload: values
-          });
-          message.success("添加管理员成功!");
-          this.props.form.resetFields();
-          dispatch({
-            type: "admin/queryAdminByParams",
-            payload: {
-              admin: {}
+            payload: values,
+            callback: res => {
+              message.success("添加管理员成功!");
+              this.props.form.resetFields();
+              dispatch({
+                type: "admin/queryAdminByParams",
+                payload: {
+                  admin: {}
+                }
+              });
             }
           });
         }

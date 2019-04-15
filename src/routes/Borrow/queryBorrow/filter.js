@@ -46,6 +46,13 @@ class Filter extends Component {
     const resetFields = e => {
       e.preventDefault();
       this.props.form.resetFields();
+      this.setState({
+        borrowStartTime: "",
+        borrowEndTime: "",
+        backStartTime: "",
+        backEndTime: ""
+      });
+      onSearch("");
       dispatch({
         type: "book/queryBorrowByFuzzyAndPage",
         payload: {
@@ -57,7 +64,7 @@ class Filter extends Component {
     const handleSubmit = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
-        console.dir("借阅记录查询过滤参数：" + values.borrow_range);
+        console.log("借阅记录查询过滤参数：" + values);
         appUtils.removeObjUnAttr(values);
         values["borrowStartTime"] = this.state.borrowStartTime;
         values["borrowEndTime"] = this.state.borrowEndTime;
