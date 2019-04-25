@@ -77,18 +77,22 @@ class UpdateForm extends Component {
           values["uuid"] = selectBook.uuid;
           dispatch({
             type: "book/updateBook",
-            payload: values
+            payload: values,
+            callback: res => {
+              if (res) {
+                message.success("编辑图书成功!");
+                setTimeout(() => {
+                  dispatch({
+                    type: "book/queryBookByParams",
+                    payload: { uuid: selectBook.uuid }
+                  });
+                }, 100);
+                setTimeout(() => {
+                  onChange();
+                }, 500);
+              }
+            }
           });
-          message.success("编辑图书成功!");
-          setTimeout(() => {
-            dispatch({
-              type: "book/queryBookByParams",
-              payload: { uuid: selectBook.uuid }
-            });
-          }, 100);
-          setTimeout(() => {
-            onChange();
-          }, 500);
         }
       });
     };

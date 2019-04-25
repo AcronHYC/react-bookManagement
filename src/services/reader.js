@@ -20,3 +20,10 @@ export function addReader(params) {
     params: params
   });
 }
+
+export function queryUserBorrowCount(params) {
+  return sendRequest("/api/user/queryUserBorrowCount", {
+    method: "GET",
+    params: params
+  });
+}

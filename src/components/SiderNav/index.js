@@ -4,7 +4,7 @@ import styles from "./style.css";
 
 const menus = [
   {
-    title: "首页",
+    title: "仪表盘",
     icon: "home",
     key: "/home"
   },

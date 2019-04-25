@@ -12,6 +12,12 @@ class Login extends Component {
     this.history = this.props.history;
   }
 
+  componentDidMount() {
+    if (isAuthenticated("loginUser") && localStorage.getItem("token")) {
+      this.history.push("/");
+    }
+  }
+
   render() {
     const { history, dispatch, loading } = this.props;
 

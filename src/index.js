@@ -18,6 +18,7 @@ app.model(require("./models/login").default);
 app.model(require("./models/admin").default);
 app.model(require("./models/reader").default);
 app.model(require("./models/book").default);
+app.model(require("./models/home").default);
 
 // 4. Router for browserHistory dynamic load
 app.router(require("./router").default);

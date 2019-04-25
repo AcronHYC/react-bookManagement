@@ -5,6 +5,8 @@ import LoadableComponent from "../../utils/LoadableComponent";
 import dynamic from "dva/dynamic";
 import app from "../../index";
 
+const Home = LoadableComponent(() => import("../../routes/Home"));
+
 const QueryAdmin = LoadableComponent(() =>
   import("../../routes/Admin/queryAdmin")
 );
@@ -43,6 +45,8 @@ class ContentMain extends Component {
     return (
       <div style={{ padding: 16, position: "relative" }}>
         <Switch>
+          <PrivateRoute exact path="/home" component={Home} />
+
           {/* 管理员模块路由 */}
           <PrivateRoute
             exact

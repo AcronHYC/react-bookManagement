@@ -66,16 +66,20 @@ class List extends React.Component {
           payload: {
             role: this.state.selectedKey,
             uuid: this.state.selectedUuid
+          },
+          callback: res => {
+            if (res) {
+              setTimeout(() => {
+                dispatch({
+                  type: "admin/queryAdminByPage",
+                  payload: {}
+                });
+              }, 500);
+              message.success("更新权限成功！");
+              toggleModal();
+            }
           }
         });
-        setTimeout(() => {
-          dispatch({
-            type: "admin/queryAdminByPage",
-            payload: {}
-          });
-        }, 500);
-        message.success("更新权限成功！");
-        toggleModal();
       }
     };
 

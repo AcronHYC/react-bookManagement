@@ -83,3 +83,24 @@ export function updateBorrow(params) {
     params: params
   });
 }
+
+export function queryBookClassCount(params) {
+  return sendRequest("/api/book/queryBookClassCount", {
+    method: "GET",
+    params: params
+  });
+}
+
+export function queryBookClassOutCount(params) {
+  return sendRequest("/api/book/queryBookClassOutCount", {
+    method: "GET",
+    params: params
+  });
+}
+
+export function queryBookCountLimitTen(params) {
+  return sendRequest("/api/book/queryBookCountLimitTen", {
+    method: "GET",
+    params: params
+  });
+}
