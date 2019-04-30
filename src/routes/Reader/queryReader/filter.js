@@ -51,7 +51,7 @@ class Filter extends Component {
       <Select onChange={onSelectChange} defaultValue="userName">
         <Option value="userName">用户名</Option>
         <Option value="realName">真实姓名</Option>
-        <Option value="IDcard">身份证号码</Option>
+        <Option value="idcard">身份证号码</Option>
         <Option value="telephone">手机号码 </Option>
         <Option value="email">邮箱</Option>
       </Select>

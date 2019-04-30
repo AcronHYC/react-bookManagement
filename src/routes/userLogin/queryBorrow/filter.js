@@ -3,6 +3,7 @@ import { Button, Form, Row, Col, Select, Input, DatePicker } from "antd";
 import { withRouter } from "react-router-dom";
 import styles from "./style.css";
 import appUtils from "../../../utils/app-utils";
+import { isAuthenticated } from "../../../utils/session";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -15,6 +16,7 @@ class Filter extends Component {
     backStartTime: "",
     backEndTime: ""
   };
+
   render() {
     const {
       dispatch,
@@ -61,9 +63,10 @@ class Filter extends Component {
       });
       onSearch("");
       dispatch({
-        type: "book/queryBorrowByFuzzyAndPage",
+        type: "book/queryBorrowByFuzzyAndPageAndUserid",
         payload: {
-          status: stateKey
+          status: stateKey,
+          user_uuid: JSON.parse(isAuthenticated("loginUser")).id
         }
       });
     };
@@ -79,12 +82,13 @@ class Filter extends Component {
         values["backStartTime"] = this.state.backStartTime;
         values["backEndTime"] = this.state.backEndTime;
         onSearch(values);
-        if (filterPrams.realName !== undefined) {
-          values["realName"] = filterPrams.realName;
+        if (filterPrams.bookName !== undefined) {
+          values["bookName"] = filterPrams.bookName;
         }
         values["status"] = stateKey;
+        values["user_uuid"] = JSON.parse(isAuthenticated("loginUser")).id;
         dispatch({
-          type: "book/queryBorrowByFuzzyAndPage",
+          type: "book/queryBorrowByFuzzyAndPageAndUserid",
           payload: values
         });
       });
@@ -115,18 +119,7 @@ class Filter extends Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={6}>
-              <FormItem label="读者姓名">
-                {getFieldDecorator("realName", {})(
-                  <Input
-                    placeholder="请输入读者姓名"
-                    style={{ width: "200px" }}
-                    allowClear
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={6}>
+            <Col span={7} offset={3}>
               <FormItem label="应借天数">
                 {getFieldDecorator("borrow_day", {})(
                   <Input
@@ -137,7 +130,7 @@ class Filter extends Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={6}>
+            <Col span={7} offset={1}>
               <FormItem label="逾期天数">
                 {getFieldDecorator("overdue", {})(
                   <Input
@@ -161,7 +154,7 @@ class Filter extends Component {
               </FormItem>
             </Col>
             <Col span={8} offset={3}>
-              <FormItem label="还书日期">
+              <FormItem label="还书日期" style={{ marginLeft: "-6.5%" }}>
                 {getFieldDecorator("back_range", {})(
                   <RangePicker
                     style={{ width: "300px" }}
@@ -170,20 +163,24 @@ class Filter extends Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={4} offset={2}>
+            <Col span={4} offset={1}>
               <Button
                 style={{ marginTop: "4px" }}
                 shape="circle"
                 icon="search"
                 htmlType="submit"
-                loading={loading.effects["book/queryBorrowByFuzzyAndPage"]}
+                loading={
+                  loading.effects["book/queryBorrowByFuzzyAndPageAndUserid"]
+                }
               />
               <Button
                 style={{ marginLeft: 12 }}
                 shape="circle"
                 icon="reload"
                 htmlType="reset"
-                loading={loading.effects["book/queryBorrowByFuzzyAndPage"]}
+                loading={
+                  loading.effects["book/queryBorrowByFuzzyAndPageAndUserid"]
+                }
               />
             </Col>
           </Row>

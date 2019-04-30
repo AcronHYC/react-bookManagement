@@ -111,9 +111,14 @@ class CustomMenu extends React.Component {
       >
         {this.props.menus &&
           this.props.menus.map(item => {
-            return item.subs && item.subs.length > 0
-              ? this.renderSubMenu(item)
-              : this.renderMenuItem(item);
+            if (
+              item.who.indexOf(JSON.parse(isAuthenticated("loginUser")).who) >=
+              0
+            ) {
+              return item.subs && item.subs.length > 0
+                ? this.renderSubMenu(item)
+                : this.renderMenuItem(item);
+            }
           })}
       </Menu>
     );

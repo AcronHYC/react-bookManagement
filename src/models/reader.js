@@ -1,7 +1,8 @@
 import {
   queryReaderByParams,
   queryReaderByFuzzyAndPage,
-  addReader
+  addReader,
+  updateReader
 } from "../services/reader";
 
 export default {
@@ -40,6 +41,12 @@ export default {
         }
       }
     },
+    *queryUserById({ payload, callback }, { select, call, put }) {
+      const response = yield call(queryReaderByParams, payload);
+      if (response.result) {
+        callback(response.result[0]);
+      }
+    },
     *queryUserByFuzzyAndPage({ payload }, { select, call, put }) {
       const response = yield call(queryReaderByFuzzyAndPage, payload);
       if (response.result.jsonUserList) {
@@ -57,6 +64,13 @@ export default {
     *addReader({ payload, callback }, { select, call, put }) {
       console.log(payload);
       const response = yield call(addReader, payload);
+      if (response.result) {
+        callback(response.result);
+      }
+    },
+    *updateReader({ payload, callback }, { select, call, put }) {
+      console.log(payload);
+      const response = yield call(updateReader, payload);
       if (response.result) {
         callback(response.result);
       }

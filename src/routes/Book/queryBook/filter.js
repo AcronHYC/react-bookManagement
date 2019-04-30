@@ -25,6 +25,7 @@ class Filter extends Component {
     const resetFields = e => {
       e.preventDefault();
       this.props.form.resetFields();
+      onSearch("");
       dispatch({
         type: "book/queryBookByFuzzyAndPage",
         payload: {

@@ -160,6 +160,7 @@ class List extends React.Component {
                       callback: res => {
                         if (res) {
                           message.success("您删除了自己的数据，现退出登录！");
+                          localStorage.clear();
                           logout();
                           history.push("/login");
                         }

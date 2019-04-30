@@ -21,6 +21,13 @@ export function addReader(params) {
   });
 }
 
+export function updateReader(params) {
+  return sendRequest("/api/user/updateUser", {
+    method: "POST",
+    params: params
+  });
+}
+
 export function queryUserBorrowCount(params) {
   return sendRequest("/api/user/queryUserBorrowCount", {
     method: "GET",

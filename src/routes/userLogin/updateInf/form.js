@@ -21,35 +21,28 @@ const RadioGroup = Radio.Group;
 const Option = Select.Option;
 
 class UpdateForm extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  state = {
-    disabledSelect: true,
-    loginUser: {}
-  };
-
   componentDidMount() {
     this.props.dispatch({
-      type: "admin/queryAdminById",
+      type: "reader/queryUserById",
       payload: {
-        uuid: JSON.parse(isAuthenticated("loginUser")).uuid
+        id: JSON.parse(isAuthenticated("loginUser")).id
       },
       callback: res => {
-        if (res) {
-          this.setState({
-            loginUser: res
-          });
-        }
+        this.setState({
+          loginUser: res
+        });
       }
     });
   }
 
+  state = {
+    loginUser: {}
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { dataSource, dispatch, history, loading } = this.props;
-    let updateLoading = loading.effects["admin/updateAdmin"];
+    const updateLoading = loading.effects["reader/updateReader"];
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -61,15 +54,15 @@ class UpdateForm extends Component {
       }
     };
 
-    const validateAdminName = (rule, value, callback) => {
+    const validateUserName = (rule, value, callback) => {
       let flag = true;
       if ((value && value.length < 6) || (value && value.length > 12)) {
         callback("用户名长度需要在6-12位");
       } else if (value && value.length >= 6 && value.length <= 12) {
         dataSource.map(item => {
           if (
-            item.adminName === value &&
-            value !== this.state.loginUser.adminName
+            item.userName === value &&
+            value !== this.state.loginUser.userName
           ) {
             callback("该用户名已经被使用!");
           }
@@ -148,6 +141,24 @@ class UpdateForm extends Component {
       callback();
     };
 
+    const validateidcard = (rule, value, callback) => {
+      let flag = true;
+      if (value && value.length !== 15 && value.length !== 18) {
+        callback("身份证号码应该为15位或18位！");
+      } else if (value) {
+        dataSource.map(item => {
+          if (item.idcard === value && value !== this.state.loginUser.idcard) {
+            callback("该身份证号码已经被使用!");
+          }
+        });
+        if (flag) {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+
     const handleReset = e => {
       e.preventDefault();
       this.props.form.resetFields();
@@ -158,22 +169,17 @@ class UpdateForm extends Component {
       this.props.form.validateFieldsAndScroll((err, values) => {
         console.log(values);
         if (!err) {
-          values["uuid"] = this.state.loginUser.uuid;
+          values["id"] = this.state.loginUser.id;
           dispatch({
-            type: "admin/updateAdmin",
+            type: "reader/updateReader",
             payload: values,
             callback: res => {
               if (res) {
                 if (values.password === undefined || values.password === "") {
                   values.password = this.state.loginUser.password;
                 }
-                if (values.adminName !== this.state.loginUser.adminName) {
+                if (values.userName !== this.state.loginUser.userName) {
                   message.warn("您的用户名已经修改，需要重新登录！");
-                  localStorage.clear();
-                  logout();
-                  history.push("/login");
-                } else if (values.role !== this.state.loginUser.role) {
-                  message.warn("您的权限已经修改，需要重新登录！");
                   localStorage.clear();
                   logout();
                   history.push("/login");
@@ -188,9 +194,9 @@ class UpdateForm extends Component {
                     loginUser: values
                   });
                   dispatch({
-                    type: "admin/queryAdminByParams",
+                    type: "reader/queryUserByParams",
                     payload: {
-                      admin: {}
+                      reader: {}
                     }
                   });
                   this.props.form.resetFields();
@@ -204,13 +210,18 @@ class UpdateForm extends Component {
 
     return (
       <div>
-        <Form {...formItemLayout} onReset={handleReset} onSubmit={handleSubmit}>
+        <Form
+          {...formItemLayout}
+          onReset={handleReset}
+          onSubmit={handleSubmit}
+          loading={(loading.effects = ["reader/queryUserById"])}
+        >
           <FormItem label="用户名" hasFeedback>
-            {getFieldDecorator("adminName", {
-              initialValue: this.state.loginUser.adminName,
+            {getFieldDecorator("userName", {
+              initialValue: this.state.loginUser.userName,
               rules: [
                 { required: true, message: "用户名不能为空!" },
-                { validator: validateAdminName }
+                { validator: validateUserName }
               ]
             })(<Input placeholder="请输入用户名" style={{ width: "250px" }} />)}
           </FormItem>
@@ -270,20 +281,26 @@ class UpdateForm extends Component {
               <Input style={{ width: "250px" }} placeholder="请输入真实姓名" />
             )}
           </FormItem>
-          <FormItem label="性别">
-            {getFieldDecorator("sex", {
-              initialValue: this.state.loginUser.sex,
+          <FormItem label="身份证号码" hasFeedback>
+            {getFieldDecorator("idcard", {
+              initialValue: this.state.loginUser.idcard,
+              validateFirst: true,
               rules: [
                 {
                   required: true,
-                  message: "性别不能为空!"
+                  message: "身份证号码不能为空!"
+                },
+                { validator: validateidcard },
+                {
+                  pattern: new RegExp(/^[0-9]\d*$/, "g"),
+                  message: "请输入数字！"
                 }
               ]
             })(
-              <RadioGroup>
-                <Radio value="male">男</Radio>
-                <Radio value="female">女</Radio>
-              </RadioGroup>
+              <Input
+                style={{ width: "250px" }}
+                placeholder="请输入15或18位身份证号码"
+              />
             )}
           </FormItem>
           <FormItem label="手机号码" hasFeedback>
@@ -325,26 +342,6 @@ class UpdateForm extends Component {
                 style={{ width: "250px" }}
                 placeholder="请输入正确格式的邮箱"
               />
-            )}
-          </FormItem>
-          <FormItem label="权限">
-            {getFieldDecorator("role", {
-              initialValue: this.state.loginUser.role,
-              rules: [
-                {
-                  required: true,
-                  message: "权限选择不能为空!"
-                }
-              ]
-            })(
-              <Select
-                style={{ width: "250px" }}
-                disabled={this.state.disabledSelect}
-              >
-                <Option value="3">普通管理员</Option>
-                <Option value="2">高级管理员</Option>
-                <Option value="1">超级管理员</Option>
-              </Select>
             )}
           </FormItem>
           <Form.Item

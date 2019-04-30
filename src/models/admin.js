@@ -100,6 +100,12 @@ export default {
       if (response.result) {
         callback(response.result);
       }
+    },
+    *queryAdminById({ payload, callback }, { select, call, put }) {
+      const response = yield call(queryAdminByParams, payload);
+      if (response.result) {
+        callback(response.result[0]);
+      }
     }
   },
 

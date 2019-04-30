@@ -10,55 +10,79 @@ import {
   Tooltip
 } from "antd";
 import { withRouter } from "react-router-dom";
-import {
-  isAuthenticated,
-  setSessionStorage,
-  logout
-} from "../../../utils/session";
+import appUtils from "../../../utils/app-utils";
+import moment from "moment";
+import "moment/locale/zh-cn";
+moment.locale("zh-cn");
 
-class List extends React.Component {
+class List extends Component {
   render() {
     const {
       dispatch,
       dataSource,
-      selectReader,
+      selectBook,
       pagination,
       history,
       loading,
-      isLoading,
-      filterValue,
-      selectedKey
+      bookClassList,
+      filterPrams,
+      stateKey,
+      isLoading
     } = this.props;
 
     const columns = [
       {
-        title: "用户名",
-        dataIndex: "userName",
-        width: 200,
+        title: "图书名称",
+        dataIndex: "bookName",
         align: "center"
       },
       {
-        title: "真实姓名",
-        dataIndex: "realName",
-        width: 200,
+        title: "作者",
+        dataIndex: "author",
         align: "center"
       },
       {
-        title: "身份证号码",
-        dataIndex: "idcard",
-        width: 250,
+        title: "出版社",
+        dataIndex: "publish",
         align: "center"
       },
       {
-        title: "手机号码",
-        dataIndex: "telephone",
-        width: 200,
+        title: "国际标准书号",
+        dataIndex: "isbn",
         align: "center"
       },
       {
-        title: "邮箱",
-        dataIndex: "email",
-        width: 200,
+        title: "价格",
+        dataIndex: "price",
+        align: "center"
+      },
+      {
+        title: "图书类别",
+        dataIndex: "class_uuid",
+        align: "center",
+        render: (text, record, index) => {
+          let class_name = "";
+          bookClassList.map(item => {
+            if (item.class_uuid === record.class_uuid) {
+              class_name = item.class_name;
+            }
+          });
+          return class_name === "" ? "尚未分类" : class_name;
+        }
+      },
+      {
+        title: "状态",
+        dataIndex: "state",
+        align: "center"
+      },
+      {
+        title: "在馆数量",
+        dataIndex: "inNum",
+        align: "center"
+      },
+      {
+        title: "借出数量",
+        dataIndex: "outNum",
         align: "center"
       },
       {
@@ -70,7 +94,7 @@ class List extends React.Component {
           return (
             <Tooltip
               placement="top"
-              title="查看该读者的借书记录"
+              title="查看该书的借阅记录"
               arrowPointAtCenter
             >
               <Button
@@ -79,7 +103,7 @@ class List extends React.Component {
                 shape="circle"
                 onClick={() => {
                   let path = {
-                    pathname: "/home/circulateManagemment/borrowHistory",
+                    pathname: "/home/reader/queryBorrow",
                     state: {
                       record
                     }
@@ -102,20 +126,19 @@ class List extends React.Component {
       total: pagination.total,
       onChange: (page, pageSize) => {
         console.log("切换后的页码：" + page + "，每页数据数量：" + pageSize);
-        if (filterValue !== undefined && filterValue.length > 0) {
-          let params = {
-            page: page,
-            pageSize: pageSize
-          };
-          params[selectedKey] = filterValue;
+        if (!appUtils.isEmpty(filterPrams)) {
+          filterPrams["state"] = stateKey;
+          filterPrams["page"] = page;
+          filterPrams["pageSize"] = pageSize;
           dispatch({
-            type: "admin/queryAdminByFuzzyAndPage",
-            payload: params
+            type: "book/queryBookByFuzzyAndPage",
+            payload: filterPrams
           });
         } else {
           dispatch({
-            type: "reader/queryUserByFuzzyAndPage",
+            type: "book/queryBookByFuzzyAndPage",
             payload: {
+              state: stateKey,
               page: page,
               pageSize: pageSize
             }
@@ -124,20 +147,19 @@ class List extends React.Component {
       },
       onShowSizeChange: (current, size) => {
         console.log("当前页码：" + current + "，每页数据数量：" + size);
-        if (filterValue !== undefined && filterValue.length > 0) {
-          let params = {
-            page: current,
-            pageSize: size
-          };
-          params[selectedKey] = filterValue;
+        if (!appUtils.isEmpty(filterPrams)) {
+          filterPrams["state"] = stateKey;
+          filterPrams["page"] = current;
+          filterPrams["pageSize"] = size;
           dispatch({
-            type: "reader/queryUserByFuzzyAndPage",
-            payload: params
+            type: "book/queryBookByFuzzyAndPage",
+            payload: filterPrams
           });
         } else {
           dispatch({
-            type: "reader/queryUserByFuzzyAndPage",
+            type: "book/queryBookByFuzzyAndPage",
             payload: {
+              state: stateKey,
               page: current,
               pageSize: size
             }
@@ -159,7 +181,7 @@ class List extends React.Component {
           size="small"
           bordered={true}
           dataSource={dataSource}
-          rowKey={record => record.id}
+          rowKey={record => record.uuid}
           loading={isLoading}
           pagination={page}
         />

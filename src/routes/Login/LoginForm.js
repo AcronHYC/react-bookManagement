@@ -13,11 +13,12 @@ class LoginForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataSource, dispatch, history, loading } = this.props;
+    const { dataSource, dispatch, history, loading, tab } = this.props;
 
     const handleSubmit = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
+        console.log(values);
         dispatch({
           type: "login/login",
           payload: values,
@@ -26,6 +27,11 @@ class LoginForm extends Component {
             if (res.error) {
               message.error(res.error);
             } else {
+              if (values.hasOwnProperty("adminName")) {
+                res.loginUser["who"] = "admin";
+              } else {
+                res.loginUser["who"] = "reader";
+              }
               setSessionStorage("loginUser", JSON.stringify(res.loginUser));
               localStorage.setItem("token", res.token);
               history.push("/");
@@ -38,10 +44,9 @@ class LoginForm extends Component {
 
     return (
       <div>
-        <h3 style={{ color: "grey" }}>管理员登录</h3>
         <Form onSubmit={handleSubmit}>
           <Form.Item hasFeedback>
-            {getFieldDecorator("adminName", {
+            {getFieldDecorator(tab, {
               rules: [{ required: true, message: "请输入用户名!" }]
             })(
               <Input

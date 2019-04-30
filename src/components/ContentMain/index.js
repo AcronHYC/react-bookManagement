@@ -34,6 +34,18 @@ const QueryBorrow = LoadableComponent(() =>
   import("../../routes/Borrow/queryBorrow")
 );
 
+const UserQueryBorrow = LoadableComponent(() =>
+  import("../../routes/userLogin/queryBorrow")
+);
+
+const UserUpdateInf = LoadableComponent(() =>
+  import("../../routes/userLogin/updateInf")
+);
+
+const UserQueryBook = LoadableComponent(() =>
+  import("../../routes/userLogin/queryBook")
+);
+
 class ContentMain extends Component {
   render() {
     // const QueryAdmin = dynamic({
@@ -46,7 +58,6 @@ class ContentMain extends Component {
       <div style={{ padding: 16, position: "relative" }}>
         <Switch>
           <PrivateRoute exact path="/home" component={Home} />
-
           {/* 管理员模块路由 */}
           <PrivateRoute
             exact
@@ -63,7 +74,6 @@ class ContentMain extends Component {
             path="/home/adminManagemment/updateAdmin"
             component={UpdateAdmin}
           />
-
           {/* 读者模块路由 */}
           <PrivateRoute
             exact
@@ -75,7 +85,6 @@ class ContentMain extends Component {
             path="/home/readerManagement/addReader"
             component={AddReader}
           />
-
           {/* 图书模块路由 */}
           <PrivateRoute
             exact
@@ -98,6 +107,23 @@ class ContentMain extends Component {
             exact
             path="/home/circulateManagemment/borrowHistory"
             component={QueryBorrow}
+          />
+
+          {/* 读者登录模块路由 */}
+          <PrivateRoute
+            exact
+            path="/home/reader/queryBorrow"
+            component={UserQueryBorrow}
+          />
+          <PrivateRoute
+            exact
+            path="/home/reader/updateInf"
+            component={UserUpdateInf}
+          />
+          <PrivateRoute
+            exact
+            path="/home/reader/queryBook"
+            component={UserQueryBook}
           />
 
           <Redirect exact from="/" to="/home" />

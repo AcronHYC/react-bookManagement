@@ -70,6 +70,25 @@ class UpdateForm extends Component {
       }
     };
 
+    const validateInum = (rule, value, callback) => {
+      if (
+        this.props.form.getFieldValue("state") === "下架" &&
+        value &&
+        value !== "0"
+      ) {
+        callback("下架图书需将在馆数量设置为0！");
+      } else if (
+        selectBook.state === "下架" &&
+        this.props.form.getFieldValue("state") === "在馆" &&
+        value &&
+        parseInt(value) < 1
+      ) {
+        callback("重新上架的图书在馆数量必须大于0!");
+      } else {
+        callback();
+      }
+    };
+
     const handleSubmit = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
@@ -100,6 +119,24 @@ class UpdateForm extends Component {
     const handleReset = e => {
       e.preventDefault();
       this.props.form.resetFields();
+    };
+
+    const classExist = () => {
+      let class_uuid = "尚未分类";
+      bookClassList.map(item => {
+        if (item.class_uuid === selectBook.class_uuid) {
+          class_uuid = item.class_uuid;
+        }
+      });
+      return class_uuid;
+    };
+
+    const validateClass = (rule, value, callback) => {
+      if (value === "尚未分类") {
+        callback("请选择该图书的分类!");
+      } else {
+        callback();
+      }
     };
 
     return (
@@ -157,8 +194,11 @@ class UpdateForm extends Component {
           </FormItem>
           <FormItem label="图书分类">
             {getFieldDecorator("class_uuid", {
-              initialValue: selectBook.class_uuid,
-              rules: [{ required: true, message: "请选择图书分类" }]
+              initialValue: classExist(),
+              rules: [
+                { required: true, message: "请选择图书分类" },
+                { validator: validateClass }
+              ]
             })(
               <Select
                 style={{ width: "200px" }}
@@ -187,6 +227,7 @@ class UpdateForm extends Component {
               initialValue: selectBook.inNum,
               rules: [
                 { required: true, message: "在馆数量不能为空!" },
+                { validator: validateInum },
                 {
                   pattern: new RegExp(/^[0-9]\d*$/, "g"),
                   message: "请输入数字！"

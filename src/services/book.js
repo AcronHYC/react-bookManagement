@@ -104,3 +104,10 @@ export function queryBookCountLimitTen(params) {
     params: params
   });
 }
+
+export function queryBorrowByFuzzyAndPageAndUserid(params) {
+  return sendRequest("/api/borrow/queryBorrowByFuzzyAndPageAndUserid", {
+    method: "GET",
+    params: params
+  });
+}

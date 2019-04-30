@@ -2,12 +2,23 @@ import React, { Component } from "react";
 import { connect } from "dva";
 import { Layout, Tabs } from "antd";
 import CustomBreadcrumb from "../../../components/CustomBreadcrumb/index";
+import { isAuthenticated } from "../../../utils/session";
 import List from "./list";
 import Filter from "./filter";
 
 const TabPane = Tabs.TabPane;
 
 class QueryBorrow extends Component {
+  constructor(props) {
+    super(props);
+    this.dispatch = this.props.dispatch;
+  }
+
+  state = {
+    filterPrams: {},
+    stateKey: "未还"
+  };
+
   componentDidMount() {
     try {
       this.setState({
@@ -16,40 +27,28 @@ class QueryBorrow extends Component {
       });
       setTimeout(() => {
         this.props.dispatch({
-          type: "book/queryBorrowByFuzzyAndPage",
+          type: "book/queryBorrowByFuzzyAndPageAndUserid",
           payload: {
             status: "未还",
-            realName: this.props.location.state.record.realName
+            bookName: this.props.location.state.record.bookName,
+            user_uuid: JSON.parse(isAuthenticated("loginUser")).id
           }
         });
       }, 200);
     } catch (error) {
-      this.props.dispatch({
-        type: "book/queryBorrowByFuzzyAndPage",
+      this.dispatch({
+        type: "book/queryBorrowByFuzzyAndPageAndUserid",
         payload: {
-          status: "未还"
+          status: "未还",
+          user_uuid: JSON.parse(isAuthenticated("loginUser")).id
         }
       });
     }
   }
 
-  state = {
-    filterPrams: {},
-    stateKey: "未还"
-  };
-
   render() {
     const { dispatch, book, loading, history } = this.props;
-    const {
-      list,
-      pagination,
-      selectBook,
-      bookClassList,
-      userList,
-      borrowList,
-      isDeleteBorrowSuccess,
-      isUpdateBorrowSuccess
-    } = book;
+    const { pagination, borrowList } = book;
 
     const listProps = {
       dispatch,
@@ -57,45 +56,16 @@ class QueryBorrow extends Component {
       pagination,
       loading,
       borrowList,
-      bookClassList,
-      selectBook,
-      isUpdateBorrowSuccess,
-      isDeleteBorrowSuccess,
       filterPrams: this.state.filterPrams,
-      dataSource: list,
-      stateKey: this.state.stateKey,
-      isLoading: loading.effects["book/queryBorrowByFuzzyAndPage"]
-    };
-
-    const callback = key => {
-      this.setState({
-        stateKey: key
-      });
-      if (this.state.filterPrams.realName !== undefined) {
-        dispatch({
-          type: "book/queryBorrowByFuzzyAndPage",
-          payload: {
-            realName: this.state.filterPrams.realName,
-            status: key
-          }
-        });
-      } else {
-        dispatch({
-          type: "book/queryBorrowByFuzzyAndPage",
-          payload: {
-            status: key
-          }
-        });
-      }
+      stateKey: this.state.stateKey
     };
 
     const filterProps = {
-      filterPrams: this.state.filterPrams,
       loading,
       dispatch,
-      bookClassList,
       history,
       borrowList,
+      filterPrams: this.state.filterPrams,
       stateKey: this.state.stateKey,
       onSearch: newParams => {
         this.setState({
@@ -104,9 +74,33 @@ class QueryBorrow extends Component {
       }
     };
 
+    const callback = key => {
+      this.setState({
+        stateKey: key
+      });
+      if (this.state.filterPrams.bookName !== undefined) {
+        dispatch({
+          type: "book/queryBorrowByFuzzyAndPageAndUserid",
+          payload: {
+            status: key,
+            bookName: this.props.location.state.record.bookName,
+            user_uuid: JSON.parse(isAuthenticated("loginUser")).id
+          }
+        });
+      } else {
+        dispatch({
+          type: "book/queryBorrowByFuzzyAndPageAndUserid",
+          payload: {
+            status: key,
+            user_uuid: JSON.parse(isAuthenticated("loginUser")).id
+          }
+        });
+      }
+    };
+
     return (
       <div>
-        <CustomBreadcrumb arr={["借还管理", "借阅记录"]} />
+        <CustomBreadcrumb arr={["借阅记录"]} />
         <Filter {...filterProps} />
         <br />
         <Tabs defaultActiveKey={this.state.stateKey} onChange={callback}>

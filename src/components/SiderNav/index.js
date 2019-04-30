@@ -6,12 +6,14 @@ const menus = [
   {
     title: "仪表盘",
     icon: "home",
-    key: "/home"
+    key: "/home",
+    who: ["reader", "admin"]
   },
   {
     title: "管理员管理",
     icon: "lock",
     key: "/home/adminManagemment",
+    who: ["admin"],
     // models: () => [import("../../models/admin")],
     subs: [
       {
@@ -37,6 +39,7 @@ const menus = [
   {
     title: "读者管理",
     icon: "user",
+    who: ["admin"],
     key: "/home/readerManagement",
     subs: [
       {
@@ -57,6 +60,7 @@ const menus = [
     title: "图书管理",
     icon: "book",
     key: "/home/bookManagement",
+    who: ["admin"],
     subs: [
       {
         key: "/home/bookManagement/queryBook",
@@ -76,6 +80,7 @@ const menus = [
     title: "借还管理",
     icon: "read",
     key: "/home/circulateManagemment",
+    who: ["admin"],
     subs: [
       {
         key: "/home/circulateManagemment/borrowHistory",
@@ -84,6 +89,24 @@ const menus = [
         role: ["1", "2", "3"]
       }
     ]
+  },
+  {
+    title: "修改个人资料",
+    icon: "user",
+    key: "/home/reader/updateInf",
+    who: ["reader"]
+  },
+  {
+    title: "查询图书",
+    icon: "book",
+    key: "/home/reader/queryBook",
+    who: ["reader"]
+  },
+  {
+    title: "借阅记录",
+    icon: "read",
+    key: "/home/reader/queryBorrow",
+    who: ["reader"]
   }
 ];
 

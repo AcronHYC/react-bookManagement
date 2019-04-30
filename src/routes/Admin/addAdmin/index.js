@@ -13,7 +13,7 @@ class AddAdmin extends Component {
   componentWillMount() {
     const role = JSON.parse(isAuthenticated("loginUser")).role;
     if (role !== "1") {
-      message.warn("对不起，您的权限无法访问该页面!");
+      message.error("对不起，您的权限无法访问该页面!");
       this.props.history.push("/home");
     }
   }

@@ -5,12 +5,25 @@ import CustomBreadcrumb from "../../../components/CustomBreadcrumb/index";
 import AddForm from "./form";
 import BookClassForm from "./addBookClassForm";
 import BookClassForm2 from "./deleteBookClassForm";
+import {
+  isAuthenticated,
+  setSessionStorage,
+  logout
+} from "../../../utils/session";
 
 class AddBook extends Component {
   state = {
     visible: false,
     visible2: false
   };
+
+  componentWillMount() {
+    const role = JSON.parse(isAuthenticated("loginUser")).role;
+    if (role === "3") {
+      message.error("对不起，您的权限无法访问该页面!");
+      this.props.history.push("/home");
+    }
+  }
 
   componentDidMount() {
     this.props.dispatch({

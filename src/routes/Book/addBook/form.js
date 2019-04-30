@@ -71,6 +71,14 @@ class AddForm extends Component {
       }
     };
 
+    const validateInnum = (rule, value, callback) => {
+      if (value && parseInt(value) < 1) {
+        callback("新上架图书在馆数量必须大于0!");
+      } else {
+        callback();
+      }
+    };
+
     const handleSubmit = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
@@ -88,6 +96,8 @@ class AddForm extends Component {
                   });
                 }, 500);
                 this.props.form.resetFields();
+              } else {
+                message.error("新增失败!");
               }
             }
           });
@@ -123,7 +133,7 @@ class AddForm extends Component {
             )}
           </FormItem>
           <FormItem label="国际标准书号" hasFeedback>
-            {getFieldDecorator("ISBN", {
+            {getFieldDecorator("isbn", {
               rules: [
                 {
                   required: true,
@@ -192,6 +202,7 @@ class AddForm extends Component {
             {getFieldDecorator("inNum", {
               rules: [
                 { required: true, message: "在馆数量不能为空!" },
+                { validator: validateInnum },
                 {
                   pattern: new RegExp(/^[0-9]\d*$/, "g"),
                   message: "请输入数字！"
@@ -242,6 +253,22 @@ class AddForm extends Component {
               loading={loading.effects["book/addBook"]}
             >
               新增图书
+            </Button>
+          </Form.Item>
+          <Form.Item
+            wrapperCol={{
+              xs: { span: 24, offset: 0 },
+              sm: { span: 16, offset: 8 }
+            }}
+          >
+            <Button
+              type="primary"
+              style={{ width: "200px" }}
+              onClick={() => {
+                history.goBack();
+              }}
+            >
+              返回
             </Button>
           </Form.Item>
         </Form>

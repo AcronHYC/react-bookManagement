@@ -54,7 +54,7 @@ class AddForm extends Component {
       }
     };
 
-    const validateIDcard = (rule, value, callback) => {
+    const validateidcard = (rule, value, callback) => {
       let flag = true;
       if (value && value.length !== 15 && value.length !== 18) {
         callback("身份证号码应该为15位或18位！");
@@ -189,14 +189,14 @@ class AddForm extends Component {
           })(<Input style={{ width: "250px" }} placeholder="请输入真实姓名" />)}
         </FormItem>
         <FormItem label="身份证号码">
-          {getFieldDecorator("IDcard", {
+          {getFieldDecorator("idcard", {
             validateFirst: true,
             rules: [
               {
                 required: true,
                 message: "身份证号码不能为空!"
               },
-              { validator: validateIDcard },
+              { validator: validateidcard },
               {
                 pattern: new RegExp(/^[0-9]\d*$/, "g"),
                 message: "请输入数字！"

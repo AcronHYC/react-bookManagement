@@ -75,7 +75,9 @@ class HeaderBar extends React.Component {
           <Icon type="user" style={{ fontSize: "22px" }} />
           &nbsp;
           <span style={{ fontSize: "18px" }}>
-            {JSON.parse(isAuthenticated("loginUser")).adminName}
+            {JSON.parse(isAuthenticated("loginUser")).adminName === undefined
+              ? JSON.parse(isAuthenticated("loginUser")).userName
+              : JSON.parse(isAuthenticated("loginUser")).adminName}
           </span>
           <Popconfirm
             title="确定退出登录吗？"

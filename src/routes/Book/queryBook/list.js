@@ -142,7 +142,7 @@ class List extends React.Component {
               class_name = item.class_name;
             }
           });
-          return class_name;
+          return class_name === "" ? "尚未分类" : class_name;
         }
       },
       {

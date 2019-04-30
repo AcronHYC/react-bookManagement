@@ -10,7 +10,8 @@ import {
   addBorrow,
   queryBorrowByFuzzyAndPage,
   deleteBorrow,
-  updateBorrow
+  updateBorrow,
+  queryBorrowByFuzzyAndPageAndUserid
 } from "../services/book";
 import {
   queryReaderByParams,
@@ -165,6 +166,20 @@ export default {
       const response = yield call(deleteBookClass, payload);
       if (response.result) {
         callback(response.result);
+      }
+    },
+    *queryBorrowByFuzzyAndPageAndUserid({ payload }, { select, call, put }) {
+      const response = yield call(queryBorrowByFuzzyAndPageAndUserid, payload);
+      if (response.result.jsonBorrowList) {
+        let borrowList = response.result.jsonBorrowList;
+        let pagination = response.result.pagination;
+        yield put({
+          type: "updateState",
+          payload: {
+            borrowList,
+            pagination
+          }
+        });
       }
     }
   },
