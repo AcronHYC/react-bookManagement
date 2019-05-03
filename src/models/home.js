@@ -24,7 +24,7 @@ export default {
   effects: {
     *queryBookClassCount({ payload, callback }, { select, call, put }) {
       const response = yield call(queryBookClassCount, payload);
-      if (response.result) {
+      if (response.success) {
         let bookClass = [];
         let bookClassCount = [];
         response.result.map(item => {
@@ -36,7 +36,7 @@ export default {
     },
     *queryBookClassOutCount({ payload, callback }, { select, call, put }) {
       const response = yield call(queryBookClassOutCount, payload);
-      if (response.result) {
+      if (response.success) {
         let bookClass = [];
         let num = [];
         response.result.map(item => {
@@ -48,7 +48,7 @@ export default {
     },
     *queryUserBorrowCount({ payload, callback }, { select, call, put }) {
       const response = yield call(queryUserBorrowCount, payload);
-      if (response.result) {
+      if (response.success) {
         let realName = [];
         let num = [];
         response.result.map(item => {
@@ -60,7 +60,7 @@ export default {
     },
     *queryBookCountLimitTen({ payload, callback }, { select, call, put }) {
       const response = yield call(queryBookCountLimitTen, payload);
-      if (response.result) {
+      if (response.success) {
         let bookName = [];
         let num = [];
         response.result.map(item => {

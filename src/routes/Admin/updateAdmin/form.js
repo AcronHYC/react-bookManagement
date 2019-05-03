@@ -31,6 +31,12 @@ class UpdateForm extends Component {
   };
 
   componentDidMount() {
+    let loginUser = JSON.parse(isAuthenticated("loginUser"));
+    if (loginUser.role === "1") {
+      this.setState({
+        disabledSelect: false
+      });
+    }
     this.props.dispatch({
       type: "admin/queryAdminById",
       payload: {

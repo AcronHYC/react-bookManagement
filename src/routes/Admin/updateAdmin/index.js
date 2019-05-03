@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "dva";
-import { Layout } from "antd";
+import { Layout, Spin } from "antd";
 import UpdateForm from "./form";
 import CustomBreadcrumb from "../../../components/CustomBreadcrumb/index";
 
@@ -27,8 +27,16 @@ class UpdateAdmin extends Component {
 
     return (
       <div>
-        <CustomBreadcrumb arr={["管理员管理", "修改资料"]} />
-        <UpdateForm {...formProps} />
+        <Spin
+          tip="加载中..."
+          spinning={
+            loading.effects["admin/queryAdminByParams"] &&
+            loading.effects["admin/queryAdminById"]
+          }
+        >
+          <CustomBreadcrumb arr={["管理员管理", "修改资料"]} />
+          <UpdateForm {...formProps} />
+        </Spin>
       </div>
     );
   }

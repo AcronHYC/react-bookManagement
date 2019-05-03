@@ -48,7 +48,7 @@ export default {
   effects: {
     *queryBookByParams({ payload }, { select, call, put }) {
       const response = yield call(queryBookByParams, payload);
-      if (response.result) {
+      if (response.success) {
         let list = response.result;
         if (list.length === 1) {
           yield put({
@@ -69,7 +69,7 @@ export default {
     },
     *queryBookByFuzzyAndPage({ payload }, { select, call, put }) {
       const response = yield call(queryBookByFuzzyAndPage, payload);
-      if (response.result.jsonBookList) {
+      if (response.success) {
         let list = response.result.jsonBookList;
         let pagination = response.result.pagination;
         yield put({
@@ -83,7 +83,7 @@ export default {
     },
     *queryBorrowByFuzzyAndPage({ payload }, { select, call, put }) {
       const response = yield call(queryBorrowByFuzzyAndPage, payload);
-      if (response.result.jsonBorrowList) {
+      if (response.success) {
         let borrowList = response.result.jsonBorrowList;
         let pagination = response.result.pagination;
         yield put({
@@ -109,7 +109,7 @@ export default {
     },
     *queryUserByParams({ payload }, { select, call, put }) {
       const response = yield call(queryReaderByParams, payload);
-      if (response.result) {
+      if (response.success) {
         let userList = response.result;
         yield put({
           type: "updateState",
@@ -170,7 +170,7 @@ export default {
     },
     *queryBorrowByFuzzyAndPageAndUserid({ payload }, { select, call, put }) {
       const response = yield call(queryBorrowByFuzzyAndPageAndUserid, payload);
-      if (response.result.jsonBorrowList) {
+      if (response.success) {
         let borrowList = response.result.jsonBorrowList;
         let pagination = response.result.pagination;
         yield put({

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "dva";
 import CustomBreadcrumb from "../../components/CustomBreadcrumb/index";
-import { Row, Col } from "antd";
+import { Row, Col, Spin } from "antd";
 import echarts from "echarts/dist/echarts.common";
 import "echarts/lib/chart/line";
 import "echarts/lib/component/tooltip";
@@ -145,21 +145,30 @@ class Home extends Component {
 
     return (
       <div>
-        <CustomBreadcrumb arr={["仪表盘"]} />
-        <Row gutter={24}>
-          <Col span={12}>
-            <div id="bar" style={{ width: "520px", height: "330px" }} />
-          </Col>
-          <Col span={12}>
-            <div id="line" style={{ width: "520px", height: "330px" }} />
-          </Col>
-        </Row>
-        <Row gutter={23}>
-          <Col span={6} />
-          <Col span={12}>
-            <div id="pie" style={{ width: "580px", height: "350px" }} />
-          </Col>
-        </Row>
+        <Spin
+          tip="加载中..."
+          spinning={
+            loading.effects["home/queryUserBorrowCount"] &&
+            loading.effects["home/queryBookClassCount"] &&
+            loading.effects["home/queryBookClassOutCount"]
+          }
+        >
+          <CustomBreadcrumb arr={["仪表盘"]} />
+          <Row gutter={24}>
+            <Col span={12}>
+              <div id="bar" style={{ width: "520px", height: "330px" }} />
+            </Col>
+            <Col span={12}>
+              <div id="line" style={{ width: "520px", height: "330px" }} />
+            </Col>
+          </Row>
+          <Row gutter={23}>
+            <Col span={6} />
+            <Col span={12}>
+              <div id="pie" style={{ width: "580px", height: "350px" }} />
+            </Col>
+          </Row>
+        </Spin>
       </div>
     );
   }

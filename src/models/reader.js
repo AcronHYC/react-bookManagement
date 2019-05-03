@@ -22,7 +22,7 @@ export default {
   effects: {
     *queryUserByParams({ payload }, { select, call, put }) {
       const response = yield call(queryReaderByParams, payload);
-      if (response.result) {
+      if (response.success) {
         let list = response.result;
         if (list.length === 1) {
           yield put({
@@ -43,13 +43,13 @@ export default {
     },
     *queryUserById({ payload, callback }, { select, call, put }) {
       const response = yield call(queryReaderByParams, payload);
-      if (response.result) {
+      if (response.success) {
         callback(response.result[0]);
       }
     },
     *queryUserByFuzzyAndPage({ payload }, { select, call, put }) {
       const response = yield call(queryReaderByFuzzyAndPage, payload);
-      if (response.result.jsonUserList) {
+      if (response.success) {
         let list = response.result.jsonUserList;
         let pagination = response.result.pagination;
         yield put({

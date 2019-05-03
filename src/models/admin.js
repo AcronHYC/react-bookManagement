@@ -36,7 +36,7 @@ export default {
   effects: {
     *queryAdminByParams({ payload }, { select, call, put }) {
       const response = yield call(queryAdminByParams, payload);
-      if (response.result) {
+      if (response.success) {
         let list = response.result;
         if (list.length === 1) {
           yield put({
@@ -57,7 +57,8 @@ export default {
     },
     *queryAdminByPage({ payload }, { select, call, put }) {
       const response = yield call(queryAdminByPage, payload);
-      if (response.result.jsonAdminList) {
+      console.log(response);
+      if (response.success) {
         let list = response.result.jsonAdminList;
         let pagination = response.result.pagination;
         yield put({
@@ -71,7 +72,7 @@ export default {
     },
     *queryAdminByFuzzyAndPage({ payload }, { select, call, put }) {
       const response = yield call(queryAdminByFuzzyAndPage, payload);
-      if (response.result.jsonAdminList) {
+      if (response.success) {
         let list = response.result.jsonAdminList;
         let pagination = response.result.pagination;
         yield put({
@@ -103,7 +104,7 @@ export default {
     },
     *queryAdminById({ payload, callback }, { select, call, put }) {
       const response = yield call(queryAdminByParams, payload);
-      if (response.result) {
+      if (response.success) {
         callback(response.result[0]);
       }
     }

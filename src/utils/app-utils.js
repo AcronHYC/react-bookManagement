@@ -52,10 +52,15 @@ const getOverdue = function(real_borrow_day, borrow_day) {
   return overdue > 0 ? overdue.toString() : "0";
 };
 
+const getTime = function(expiredTime) {
+  return new Date(expiredTime).getTime() - new Date().getTime();
+};
+
 export default {
   removeObjUnAttr: removeObjUnAttr,
   isEmpty: isEmpty,
   timestampToTime: timestampToTime,
   getDay: getDay,
-  getOverdue: getOverdue
+  getOverdue: getOverdue,
+  getTime: getTime
 };

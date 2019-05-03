@@ -170,7 +170,7 @@ class UpdateForm extends Component {
             )}
           </FormItem>
           <FormItem label="国际标准书号" hasFeedback>
-            {getFieldDecorator("ISBN", {
+            {getFieldDecorator("isbn", {
               initialValue: selectBook.isbn,
               rules: [
                 {

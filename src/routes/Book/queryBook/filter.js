@@ -97,7 +97,7 @@ class Filter extends Component {
             </Col>
             <Col span={6}>
               <FormItem label="国际标准书号">
-                {getFieldDecorator("ISBN", {})(
+                {getFieldDecorator("isbn", {})(
                   <Input
                     placeholder="请输入国际标准书号"
                     style={{ width: "200px" }}

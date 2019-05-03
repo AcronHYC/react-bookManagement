@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "dva";
-import { Layout, Tabs } from "antd";
+import { Layout, Tabs, Spin } from "antd";
 import CustomBreadcrumb from "../../../components/CustomBreadcrumb/index";
 import UpdateForm from "./form";
+import Img from "./img";
 
 class UpdateInfo extends Component {
   componentDidMount() {
@@ -28,8 +29,17 @@ class UpdateInfo extends Component {
 
     return (
       <div>
-        <CustomBreadcrumb arr={["修改个人资料"]} />
-        <UpdateForm {...formProps} />
+        <Spin
+          tip="加载中..."
+          spinning={
+            loading.effects["reader/queryUserByParams"] &&
+            loading.effects["reader/queryUserById"]
+          }
+        >
+          <CustomBreadcrumb arr={["修改个人资料"]} />
+          <UpdateForm {...formProps} />
+          {/* <Img /> */}
+        </Spin>
       </div>
     );
   }

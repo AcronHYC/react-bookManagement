@@ -1,6 +1,8 @@
 import fetch from "dva/fetch";
 import { message } from "antd";
 import appUtils from "../utils/app-utils";
+import { isAuthenticated, logout } from "../utils/session";
+import History from "history";
 
 function parseJSON(response) {
   return response.json();
@@ -41,6 +43,7 @@ const errorMessage = {
   404: "您访问的页面不存在",
   406: "您请求的格式不正确",
   410: "您请示的资源已经被永久的删除",
+  440: "token已过期，请重新登录",
   422: "创建对象时，发生验证错误",
   500: "服务器发生错误",
   600: "网络错误"
@@ -54,6 +57,24 @@ const errorMessage = {
  * @return {object}           An object containing either "data" or "err"
  */
 export async function sendRequest(url, options) {
+  if (
+    JSON.parse(isAuthenticated("loginUser")) !== null &&
+    appUtils.getTime(JSON.parse(isAuthenticated("loginUser")).expiredTime) < 0
+  ) {
+    console.log(
+      "token过期:" +
+        appUtils.getTime(
+          JSON.parse(isAuthenticated("loginUser")).expiredTime + "s"
+        )
+    );
+    logout();
+    sessionStorage.clear();
+    localStorage.clear();
+    setTimeout(() => {
+      window.location.href = "http://localhost:8000/login";
+    }, 1500);
+    return message.error("您的令牌已过期，将自动退出！");
+  }
   let searchStr = "";
   let initObj = {};
   let jsonData = "";
@@ -87,7 +108,6 @@ export async function sendRequest(url, options) {
     .then(checkStatus)
     .then(parseJSON)
     .then(response => {
-      console.log(response);
       return {
         success: true,
         result: response
@@ -107,7 +127,7 @@ export async function sendRequest(url, options) {
         content = error.message || "网络错误！";
       }
       // 如果抛出错误，但未得到catch,则会由全局的onError接收
-      message.error(content);
+      // message.error(content);
       // 如果直接return Promise.reject()的话，会直接抛出浏览器给的错误，比如unauth 一类的，无法返回我们要的对象
       // 所以按默认的，直接返回对象
       return { success: false, status, content };

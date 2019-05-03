@@ -18,12 +18,10 @@ class LoginForm extends Component {
     const handleSubmit = e => {
       e.preventDefault();
       this.props.form.validateFieldsAndScroll((err, values) => {
-        console.log(values);
         dispatch({
           type: "login/login",
           payload: values,
           callback: res => {
-            console.log(res);
             if (res.error) {
               message.error(res.error);
             } else {
@@ -32,6 +30,7 @@ class LoginForm extends Component {
               } else {
                 res.loginUser["who"] = "reader";
               }
+              res.loginUser["expiredTime"] = res.expiredTime;
               setSessionStorage("loginUser", JSON.stringify(res.loginUser));
               localStorage.setItem("token", res.token);
               history.push("/");
@@ -73,7 +72,7 @@ class LoginForm extends Component {
           <Form.Item>
             {getFieldDecorator("remember", {
               valuePropName: "checked",
-              initialValue: true
+              initialValue: false
             })(<Checkbox>记住密码</Checkbox>)}
             <Button
               type="primary"
